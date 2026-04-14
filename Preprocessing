@@ -1,1 +1,92 @@
+// Group Project-Scam Centre in SEA countries
 
+// 0 Centering the map on a SEA country Cambodia
+Map.setCenter(103.524, 10.627, 7);
+
+function maskS2(image) {
+  var qa = image.select('QA60');
+
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+      .and(qa.bitwiseAnd(cirrusBitMask).eq(0));
+
+  return image.updateMask(mask);
+}
+ 
+// 1 Define AOI(Area of Interest)
+var aoi = ee.Geometry.Point(103.524, 10.627).buffer(5000); // Sihanoukville
+Map.centerObject(aoi, 12);
+
+// 2 Sentinel2 and looingfor build-up area and enclosure
+var s2 = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterBounds(aoi)
+  .filterDate('2018-01-01', '2023-12-31')
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
+  .map(maskS2)
+  .select(['B2','B3','B4','B8','B11'])
+  .median();
+
+Map.addLayer(s2, {bands: ['B4', 'B3', 'B2'], min: 0, max: 3000}, 'Sentinel-2 RGB');
+
+// 3 Night-Time Lights (key insight)
+var ntl = ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG")
+  .filterBounds(aoi)
+  .filterDate('2018-01-01', '2023-12-31')
+  .mean();
+
+Map.addLayer(ntl, {min: 0, max: 50}, 'Night Lights');
+
+// 4 Change Detection
+var before = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterBounds(aoi)
+  .filterDate('2018-01-01', '2019-12-31')
+  .map(maskS2)
+  .select(['B2','B3','B4','B8','B11'])
+  .median();
+
+var after = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterBounds(aoi)
+  .filterDate('2022-01-01', '2023-12-31')
+  .map(maskS2)
+  .select(['B2','B3','B4','B8','B11'])
+  .median();
+
+Map.addLayer(before, {bands: ['B4','B3','B2'], min:0, max:3000}, 'Before');
+Map.addLayer(after, {bands: ['B4','B3','B2'], min:0, max:3000}, 'After');
+
+// 5 Built-up Index (NDBI)
+var ndbi = after.normalizedDifference(['B11', 'B8']).rename('NDBI');
+Map.addLayer(ndbi, {min: -1, max: 1, palette: ['blue', 'white', 'red']}, 'NDBI');
+
+-----
+// 2. 增强预处理：添加 NDVI 和 纹理特征
+function addIndices(image) {
+  var ndbi = image.normalizedDifference(['B11', 'B8']).rename('NDBI'); // 
+  var ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI');  // [cite: 85-89]
+  // 计算纹理特征 (GLCM) 以识别规律的建筑排列 [cite: 80]
+  var glcm = image.select('B8').toUint16().glcmTexture({size: 4}); 
+  return image.addBands([ndbi, ndvi, glcm]);
+}
+
+// 3. 应用处理
+var composite = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterBounds(aoi)
+  .filterDate('2023-01-01', '2023-12-31')
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
+  .map(maskS2)
+  .map(addIndices)
+  .median()
+  .clip(aoi);
+
+// 4. 这里的核心逻辑是为后续 Analysis 组员准备训练集
+// 按照课件 8 的逻辑，为窝点区域打上类别标签 [cite: 170]
+var trainingPoints = scamLocations.map(function(feat) {
+  return feat.set('class', 0); // 0 代表 Scam Compound
+});
+
+// 你还需要定义一些“非窝点”的区域作为对比样本
+var nonScamUrban = ee.FeatureCollection.randomPoints(aoi, 500).map(function(i){
+  return i.set({'class': 1}); // 1 代表 普通城镇 [cite: 170]
+});
