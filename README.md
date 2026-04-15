@@ -2,20 +2,28 @@
 
 ## Project Overview
 
-This project investigates the detection of suspicious scam compound developments in Southeast Asia (Cambodia, Myanmar, Laos) using satellite imagery and spatial analysis in Google Earth Engine (GEE).
+This project develops a Google Earth Engine (GEE)–based application to identify and explore spatial patterns of suspected scam compounds in Southeast Asia, with a focus on **Myanmar and Cambodia**.
 
-The aim is to identify anomalous built-up patterns that differ from typical urban and rural development, based on a combination of similarity detection and remote sensing indicators.
+Using confirmed reported sites as reference samples, the project applies remote sensing indicators and similarity-based analysis to detect locations with comparable characteristics.
 
-This project focuses on identifying spatial patterns associated with large enclosed scam compounds using multi-source satellite data.
+---
+
+## Problem Statement
+Scam compounds are difficult to systematically detect due to:
+- Limited verified ground data
+- Rapid spatial development in border regions
+- Overlap with legitimate urban/commercial environments
+
+This project aims to support **researchers and policy-oriented users** by providing a tool to explore **potential high-risk areas based on spatial patterns**, rather than definitive classification.
 
 ---
 
 ## Objectives
 
-- Detect candidate scam compound sites using satellite-derived similarity
-- Analyse spatial and morphological patterns of detected areas
-- Compare detected sites with typical urban and rural environments
-- Develop an interactive application to explore results
+- Identify spatial characteristics of confirmed scam compound sites
+- Detect candidate locations with similar patterns
+- Compare detected patterns across different environments (e.g. border vs urban)
+- Develop an interactive application for exploration and interpretation
 
 ---
 
@@ -31,6 +39,12 @@ This project focuses on identifying spatial patterns associated with large enclo
 8. Comparative analysis (urban vs rural vs detected sites)
 9. Validation and interpretation
 10. Interactive visualisation (Quarto web application)
+
+---
+
+## Study Area
+- **Primary focus:** Myanmar and Cambodia (confirmed sites available)
+- **Extended context:** Thailand and Laos (regional dynamics and border influence)
 
 ---
 
@@ -52,7 +66,7 @@ CASA0025_project/
 
 ## Team Roles
 
-* **Preprocessing:** Piyapa, Shuting
+* **Preprocessing (Researches/CSV/GITHUB/GEE):** Piyapa, Shuting
 * **Analysis (GEE):** Xihong, Jiayi
 * **Visualisation (Quarto):** Siyi, Wanqi
 
@@ -63,21 +77,28 @@ All team members contribute to the final presentation.
 ## Tools & Technologies
 
 * Google Earth Engine (GEE)
+* JavaScript (GEE Code Editor)
 * Sentinel-2 imagery
 * VIIRS Night-time Lights
-* R / CSV preprocessing
+* Excel / CSV preprocessing
 * Quarto (interactive visualisation)
 * GitHub (version control)
 
 ---
 
+## Limitations
+- Limited confirmed ground truth (Myanmar, Cambodia only)
+- Potential false positives due to similar built environments
+- No direct verification of detected sites
+
+---
+
 ## Expected Outputs
-
-* Spatial detection of candidate scam compounds
-* Comparative statistical analysis (urban vs rural vs detected sites)
-* Interactive web-based visualisation
-* Interpretable spatial insights on anomalous developments
-
+An interactive application that allows users to:
+- Explore confirmed and suspected sites
+- Visualise spatial indicators and patterns
+- Identify areas with similar characteristics
+  
 ---
 
 ## Notes
