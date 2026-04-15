@@ -67,7 +67,7 @@ CASA0025_project/
 ## Team Roles
 
 * **Preprocessing (Researches/CSV/GITHUB/GEE):** Piyapa, Shuting
-* **Analysis (GEE):** Xihong, Jiayi
+* **Analysis (GEE):** Hongxi, Jiayi
 * **Visualisation (Quarto):** Siyi, Wanqi
 
 All team members contribute to the final presentation.
