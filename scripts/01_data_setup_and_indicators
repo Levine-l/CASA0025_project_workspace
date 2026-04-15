@@ -3,7 +3,7 @@
 // -------- Group Project: Scam Compounds Detection in Southeast Asia
 
 // --- Step 1: Import reported scam compounds csv as sampling sites
-var scam_points = ee.FeatureCollection("projects/high-mountain-488411-k7/assets/scam_points");
+var scam_points = ee.FeatureCollection("projects/project-2736c40e-7bac-492d-b63/assets/scam_sites");
 
 // --- Step 2: Set map view in Southeast Asia (SEA)
 Map.setCenter(101.5, 15.0, 5);
