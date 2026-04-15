@@ -1,0 +1,120 @@
+id,country,city,name,lat,lon,site_status,context_type,source
+MY01,Myanmar,Lay Kay Kaw,KK Park 1st Stage,16.62974,98.55274,confirmed,urban_area,aspi
+MY02,Myanmar,Lay Kay Kaw,KK Park 2nd Stage,16.62518,98.56230,confirmed,commercial_complex,aspi
+MY03,Myanmar,Lay Kay Kaw,KK Park 3rd Stage,16.62135,98.55276,confirmed,urban_area,aspi
+MY04,Myanmar,Lay Kay Kaw,Circling Asia Park,16.63206,98.54903,confirmed,border_area,aspi
+MY05,Myanmar,Minletpan,Dongmei Park,16.59763,98.58016,confirmed,border_area,aspi
+MY06,Myanmar,Mae Htaw Talay,Media Asia International Group' Park,16.64755,98.52072,confirmed,commercial_complex,aspi
+MY07,Myanmar,Mae Htaw Talay,PK Park,16.66108,98.51420,confirmed,urban_area,aspi
+MY08,Myanmar,Mae Htaw Talay,UK Park,16.66806,98.51418,confirmed,urban_area,aspi
+MY09,Myanmar,Myawaddy,669 Park,16.67207,98.51473,confirmed,commercial_complex,aspi
+MY10,Myanmar,Myawaddy,Heng Sheng Group Entertainment Complex,16.69835,98.51221,confirmed,commercial_complex,aspi
+MY11,Myanmar,Myawaddy,Hengsheng Park,16.69876,98.49610,confirmed,commercial_complex,aspi
+MY12,Myanmar,Myawaddy,OK Park,16.71424,98.49502,confirmed,urban_area,aspi
+MY13,Myanmar,Myawaddy,Jinxin Park,16.71419,98.47952,confirmed,commercial_complex,aspi
+MY14,Myanmar,Chaungson,Yulong Bay Park,16.74782,98.47624,confirmed,border_area,aspi
+MY15,Myanmar,Chaungson,WKH Park,16.75535,98.46639,confirmed,border_area,aspi
+MY16,Myanmar,Theapon,Golden Paduak Park,16.76356,98.47436,confirmed,border_area,aspi
+MY17,Myanmar,Theapon,Apolo,16.77622,98.48312,confirmed,urban_area,aspi
+MY18,Myanmar,Shwekokko,Shewe Koko Extension #2,16.79849,98.50381,confirmed,commercial_complex,aspi
+MY19,Myanmar,Shwekokko,Shewe Koko Extension,16.81237,98.52289,confirmed,commercial_complex,aspi
+MY20,Myanmar,Shwekokko,New Yatai City (Shwe Koko),16.81469,98.54500,suspected,commercial_complex,aspi
+MY21,Myanmar,Mae Htaw Talay,Originos ,16.66303,98.51394,suspected,urban_area,aspi
+BA02,Cambodia,Bavet,,11.07620,106.16630,confirmed,border_area,amnesty
+BA03,Cambodia,Bavet,,11.07820,106.16350,confirmed,border_area,amnesty
+BA05,Cambodia,Bavet,,11.06980,106.17520,confirmed,border_area,amnesty
+BA06,Cambodia,Bavet,,11.06940,106.17000,confirmed,border_area,amnesty
+BA11,Cambodia,Bavet,,11.07150,106.16360,confirmed,border_area,amnesty
+BA13,Cambodia,Bavet,,11.07710,106.16980,confirmed,border_area,amnesty
+BS02,Cambodia,Botum Sakor,,10.88860,103.14610,confirmed,unknown,amnesty
+BS04,Cambodia,Botum Sakor,,10.90870,103.12780,confirmed,unknown,amnesty
+CH01,Cambodia,Choam,,14.3432,104.0568,confirmed,border_area,amnesty
+CK01,Cambodia,Chob Kokir Khang Lich,,14.3336,103.1764,confirmed,border_area,amnesty
+CT01,Cambodia,Chrey Thum,,10.9475,105.0789,confirmed,border_area,amnesty
+CT02,Cambodia,Chrey Thum,,10.9515,105.0685,confirmed,border_area,amnesty
+CT03,Cambodia,Chrey Thum,,10.9587,105.0735,confirmed,border_area,amnesty
+CT05,Cambodia,Chrey Thum,,10.9656,105.0622,confirmed,border_area,amnesty
+KA01,Cambodia,Kampot,,10.6347,104.017,confirmed,urban_area,amnesty
+KA02,Cambodia,Kampot,,10.4404,104.4424,confirmed,urban_area,amnesty
+KK01,Cambodia,Koh Kong,,11.6429,102.9142,confirmed,border_area,amnesty
+OS01,Cambodia,O’Smach,,14.4337,103.7028,confirmed,border_area,amnesty
+OS02,Cambodia,O’Smach,,14.4325,103.6979,confirmed,border_area,amnesty
+PO07,Cambodia,Poipet,,13.6401,102.5767,confirmed,border_area,amnesty
+PO10,Cambodia,Poipet,,13.6658,102.5665,confirmed,border_area,amnesty
+PO16,Cambodia,Poipet,,13.6285,102.6109,confirmed,border_area,amnesty
+PO18,Cambodia,Poipet,,13.6633,102.5519,confirmed,border_area,amnesty
+PO20,Cambodia,Poipet,,13.6714,102.5751,confirmed,border_area,amnesty
+PP04,Cambodia,Phnom Penh and surrounding areas,,11.5404,104.9074,confirmed,urban_area,amnesty
+PP09,Cambodia,Phnom Penh and surrounding areas,,11.3758,104.7547,confirmed,urban_area,amnesty
+PP13,Cambodia,Phnom Penh and surrounding areas,,11.5979,104.8709,confirmed,urban_area,amnesty
+PP23,Cambodia,Phnom Penh and surrounding areas,,11.5865,104.904,confirmed,urban_area,amnesty
+PSP01,Cambodia,Psar Prum,,12.9341,102.5395,confirmed,border_area,amnesty
+SI01,Cambodia,Sihanoukville,,10.5792,103.5572,confirmed,urban_area,amnesty
+SI02,Cambodia,Sihanoukville,,10.575,103.5526,confirmed,urban_area,amnesty
+SI04,Cambodia,Sihanoukville,,10.5861,103.5735,confirmed,urban_area,amnesty
+SI08,Cambodia,Sihanoukville,,10.6089,103.5326,confirmed,urban_area,amnesty
+SI11,Cambodia,Sihanoukville,,10.6413,103.5223,confirmed,urban_area,amnesty
+SI12,Cambodia,Sihanoukville,,10.6338,103.5061,confirmed,urban_area,amnesty
+SI15,Cambodia,Sihanoukville,,10.6268,103.5029,confirmed,urban_area,amnesty
+SI16,Cambodia,Sihanoukville,,10.624,103.5024,confirmed,urban_area,amnesty
+SI20,Cambodia,Sihanoukville,,10.6065,103.5033,confirmed,urban_area,amnesty
+SI21,Cambodia,Sihanoukville,,10.6148,103.5178,confirmed,urban_area,amnesty
+SI22,Cambodia,Sihanoukville,,10.6119,103.5251,confirmed,urban_area,amnesty
+SI32,Cambodia,Sihanoukville,,10.6371,103.5282,confirmed,urban_area,amnesty
+SI33,Cambodia,Sihanoukville,,10.64,103.5076,confirmed,urban_area,amnesty
+SI35,Cambodia,Sihanoukville,,10.6099,103.5172,confirmed,urban_area,amnesty
+SI36,Cambodia,Sihanoukville,,10.6086,103.5163,confirmed,urban_area,amnesty
+SI37,Cambodia,Sihanoukville,,10.603,103.5325,confirmed,urban_area,amnesty
+SI39,Cambodia,Sihanoukville,,10.621,103.5002,confirmed,urban_area,amnesty
+SI42,Cambodia,Sihanoukville,,10.5853,103.5505,confirmed,urban_area,amnesty
+SI44,Cambodia,Sihanoukville,,10.6059,103.5275,confirmed,urban_area,amnesty
+SI45,Cambodia,Sihanoukville,,10.641,103.5315,confirmed,urban_area,amnesty
+SI48,Cambodia,Sihanoukville,,10.6219,103.5056,confirmed,urban_area,amnesty
+SI50,Cambodia,Sihanoukville,,10.6371,103.5029,confirmed,urban_area,amnesty
+TD01,Cambodia,Thma Da,,12.1272,102.7382,confirmed,border_area,amnesty
+TK01,Cambodia,Takeo,,11.3308,104.7495,confirmed,urban_area,amnesty
+BA01,Cambodia,Bavet,,11.078,106.1698,suspected,border_area,amnesty
+BA04,Cambodia,Bavet,,11.0761,106.1662,suspected,border_area,amnesty
+BA07,Cambodia,Bavet,,11.068,106.1698,suspected,border_area,amnesty
+BA08,Cambodia,Bavet,,11.0741,106.1702,suspected,border_area,amnesty
+BA09,Cambodia,Bavet,,11.0675,106.1614,suspected,border_area,amnesty
+BA10,Cambodia,Bavet,,11.0732,106.1687,suspected,border_area,amnesty
+BA12,Cambodia,Bavet,,11.0656,106.1628,suspected,border_area,amnesty
+CH02,Cambodia,Choam,,14.3406,104.0585,suspected,border_area,amnesty
+CT06,Cambodia,Chrey Thum,,10.9596,105.0606,suspected,border_area,amnesty
+CT07,Cambodia,Chrey Thum,,10.9555,105.0594,suspected,border_area,amnesty
+KA03,Cambodia,Kampot,,10.6666,104.0173,suspected,border_area,amnesty
+KCC01,Cambodia,Kampong Chhnang,,11.8855,104.7094,suspected,border_area,amnesty
+OB01,Cambodia,Ou Beichoan,,13.7409,102.7415,suspected,border_area,amnesty
+PO02,Cambodia,Poipet,,13.6525,102.5582,suspected,commercial_complex,amnesty
+PO04,Cambodia,Poipet,,13.6464,102.5655,suspected,commercial_complex,amnesty
+PO05,Cambodia,Poipet,,13.6461,102.5661,suspected,commercial_complex,amnesty
+PO09,Cambodia,Poipet,,13.6891,102.577,suspected,commercial_complex,amnesty
+PO11,Cambodia,Poipet,,13.6635,102.5555,suspected,commercial_complex,amnesty
+PO17,Cambodia,Poipet,,13.6489,102.5978,suspected,commercial_complex,amnesty
+PP02,Cambodia,Phnom Penh and surrounding areas,,11.453,104.8561,suspected,urban_area,amnesty
+PP03,Cambodia,Phnom Penh and surrounding areas,,11.5019,104.8272,suspected,urban_area,amnesty
+PP11,Cambodia,Phnom Penh and surrounding areas,,11.4107,104.6514,suspected,urban_area,amnesty
+PP14,Cambodia,Phnom Penh and surrounding areas,,11.5985,104.8683,suspected,urban_area,amnesty
+PP15,Cambodia,Phnom Penh and surrounding areas,,11.5868,104.8755,suspected,urban_area,amnesty
+PP18,Cambodia,Phnom Penh and surrounding areas,,11.5929,104.8983,suspected,urban_area,amnesty
+PP19,Cambodia,Phnom Penh and surrounding areas,,11.5702,104.8602,suspected,urban_area,amnesty
+PP21,Cambodia,Phnom Penh and surrounding areas,,11.6048,104.8691,suspected,urban_area,amnesty
+PP22,Cambodia,Phnom Penh and surrounding areas,,11.5264,104.8755,suspected,urban_area,amnesty
+PSP02,Cambodia,Psar Prum,,12.9353,102.4927,suspected,border_area,amnesty
+PSP03,Cambodia,Psar Prum,,12.9314,102.4943,suspected,border_area,amnesty
+SI03,Cambodia,Sihanoukville,,10.5732,103.5579,suspected,urban_area,amnesty
+SI05,Cambodia,Sihanoukville,,10.5968,103.631,suspected,urban_area,amnesty
+SI07,Cambodia,Sihanoukville,,10.6101,103.535,suspected,urban_area,amnesty
+SI10,Cambodia,Sihanoukville,,10.6162,103.5652,suspected,urban_area,amnesty
+SI13,Cambodia,Sihanoukville,,10.6338,103.5056,suspected,urban_area,amnesty
+SI14,Cambodia,Sihanoukville,,10.6322,103.5063,suspected,urban_area,amnesty
+SI17,Cambodia,Sihanoukville,,10.6251,103.4982,suspected,urban_area,amnesty
+SI18,Cambodia,Sihanoukville,,10.6249,103.4977,suspected,urban_area,amnesty
+SI19,Cambodia,Sihanoukville,,10.6255,103.4957,suspected,urban_area,amnesty
+SI23,Cambodia,Sihanoukville,,10.6151,103.5271,suspected,urban_area,amnesty
+SI31,Cambodia,Sihanoukville,,10.6057,103.5286,suspected,urban_area,amnesty
+SI38,Cambodia,Sihanoukville,,10.6214,103.5127,suspected,urban_area,amnesty
+SI41,Cambodia,Sihanoukville,,10.6212,103.5019,suspected,urban_area,amnesty
+SI43,Cambodia,Sihanoukville,,10.6046,103.5279,suspected,urban_area,amnesty
+TB01,Cambodia,Trapeang Phlong,,11.673,105.9749,suspected,border_area,amnesty
