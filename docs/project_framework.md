@@ -1,105 +1,96 @@
-# Project Framework – Scam Compounds Detection (Southeast Asia)
+# Project Framework
 
 ## Topic
-
-Detection of suspicious scam compound developments in Southeast Asia using satellite imagery and spatial data analysis.
+Detection of scam compounds using satellite imagery and spatial analysis in Southeast Asia.
 
 ---
 
 ## Concept
+Rather than directly identifying scam compounds, this project focuses on detecting **spatial patterns associated with known sites**, including:
 
-This project aims to identify anomalous spatial patterns associated with large enclosed scam compounds in Cambodia and Myanmar, and Laos.
+- Enclosed compound structures
+- High-density built-up areas
+- Border proximity
+- Rapid development patterns
 
-Rather than detecting individual buildings, the focus is on **compound-level characteristics**, combining similarity-based detection with remote sensing indicators to identify areas that deviate from typical urban and rural development patterns.
+The approach is **pattern-based and exploratory**, not deterministic classification.
 
 ---
 
 ## Pattern Indicators
 
-The detection framework is based on a set of observable spatial indicators:
+### 1. Built Environment
+- NDBI (built-up intensity)
+- Dense and enclosed spatial structures
 
-* Large enclosed built-up areas
-* High building density within a defined boundary
-* Rapid construction or land-use change (temporal signals)
-* Elevated night-time light intensity
-* Strong contrast with surrounding land use
-* Location in peripheral or border regions
+### 2. Vegetation Suppression
+- NDVI reduction indicating development
 
-These indicators collectively define the spatial signature of potential scam compounds.
+### 3. Night Activity
+- Night-time lights (NTL) intensity
+
+### 4. Spatial Context
+- Proximity to international borders
+- Location within urban or commercial clusters
+
+---
+
+## Data Logic
+
+### Sample Types
+- **Confirmed sites** → used as reference/training
+- **Suspected sites** → used for validation and comparison
+
+### Context Classification
+- border_area  
+- urban_area  
+- commercial_complex  
+- special_economic_zone (where applicable)
 
 ---
 
 ## Research Questions
 
-### Core Question
-
-To what extent can satellite-derived similarity and spatial indicators identify anomalous development patterns associated with scam compounds?
-
-### Sub-questions
-
-**1. Clustering**
-
-* Do detected candidate sites exhibit significant spatial clustering?
-* Are clusters concentrated in border or peripheral regions?
-
-**2. Morphology**
-
-* How do spatial and morphological characteristics of detected sites differ from typical urban and rural areas?
+1. What spatial characteristics distinguish confirmed scam compounds?
+2. Can similar spatial patterns be detected in other locations?
+3. How do these patterns vary across different environments?
+4. To what extent can remote sensing indicators support detection?
 
 ---
 
-## Design Comparison
+## Analytical Strategy
 
-### A. Sampling Design
-
-Three groups are defined for comparison:
-
-* **Group A:** Candidate sites (top similarity scores)
-* **Group B:** Random urban samples (within same cities)
-* **Group C:** Random rural samples (within same AOI)
+Instead of traditional classification:
+- Use **confirmed sites as anchors**
+- Extract spatial features
+- Identify areas with similar characteristics
+- Validate against suspected sites
 
 ---
 
-### B. Metrics
+## Design Comparison (Interpretation Layer)
 
-For each group, the following indicators are calculated:
-
-* Similarity score
-* Mean NDBI (built-up index)
-* Mean NDVI (vegetation index)
-* Night-time light (NTL) intensity
-* Change magnitude (e.g. ΔNDBI, ΔNTL)
-* Distance to borders and transport networks
+Comparison is structured as:
+- Confirmed vs Detected patterns
+- Detected vs Suspected sites
+- Variation across spatial contexts (border / urban / commercial)
 
 ---
 
-### C. Comparative Outputs
-
-The analysis will be visualised using:
-
-* Boxplots / violin plots (distribution comparison)
-* Bar charts (mean values with confidence intervals)
-* Change analysis (before vs after development)
-* Maps with candidate sites and hotspot overlays
+## Intended Output
+A spatial decision-support tool that:
+- Highlights candidate areas
+- Allows interactive exploration
+- Supports interpretation rather than definitive classification
 
 ---
 
-### D. Statistical Testing
-
-To assess differences between groups:
-
-* t-test or Mann–Whitney test (Group A vs B/C)
-* Effect size (Cohen’s d)
-* Spatial autocorrelation (e.g. Moran’s I) or hotspot analysis
+## Key Assumption
+Locations sharing multiple spatial indicators with confirmed sites are more likely to represent similar types of developments.
 
 ---
 
-## Expected Contribution
-
-This framework provides a scalable approach to detecting suspicious developments using remote sensing and spatial analysis, contributing to understanding the spatial characteristics of emerging scam compound landscapes.
-
----
-
-## Notes
-
-This framework identifies spatial patterns consistent with suspicious developments and does not constitute verified ground-truth identification.
+## Critical Reflection
+- Detection is probabilistic, not definitive
+- Similar patterns may exist in legitimate developments
+- Results should be interpreted cautiously
