@@ -1,0 +1,147 @@
+// -------- CASA0025: Building Spatial Applications with Big Data
+// -------- Group Name: con.casa
+// -------- Group Project: Scam Compounds Detection in Southeast Asia
+
+// --- Step 1: Import reported scam compounds csv as sampling sites
+var scam_points = ee.FeatureCollection("projects/high-mountain-488411-k7/assets/scam_points");
+
+// --- Step 2: Set map view in Southeast Asia (SEA)
+Map.setCenter(101.5, 15.0, 5);
+
+// --- Step 3: Split confirmed and suspected sites
+var confirmed = scam_points.filter(ee.Filter.eq('site_status', 'confirmed'));
+var suspected = scam_points.filter(ee.Filter.eq('site_status', 'suspected'));
+
+// --- Step 4: Split by country
+var confirmedMyanmar = confirmed.filter(ee.Filter.eq('country', 'Myanmar'));
+var confirmedCambodia = confirmed.filter(ee.Filter.eq('country', 'Cambodia'));
+
+var suspectedMyanmar = suspected.filter(ee.Filter.eq('country', 'Myanmar'));
+var suspectedCambodia = suspected.filter(ee.Filter.eq('country', 'Cambodia'));
+
+// --- Step 5: Define regional AOIs for analysis
+// 1. Cambodia-focused AOI including the Cambodia–Vietnam corridor
+var aoiCambodiaVietnam = ee.Geometry.Rectangle([102.0, 10.0, 108.5, 15.5]);
+
+// 2. Myanmar–Thailand border
+var aoiMyanmarThailand = ee.Geometry.Rectangle([97.5, 15.0, 99.8, 18.8]);
+
+// 3. Golden Triangle
+var aoiGoldenTriangle = ee.Geometry.Rectangle([99.0, 19.0, 101.5, 21.8]);
+
+// --- Step 6: Display AOI layers
+Map.addLayer(aoiCambodiaVietnam, {color: 'cyan'}, 'AOI Cambodia-Vietnam', true);
+Map.addLayer(aoiMyanmarThailand, {color: 'green'}, 'AOI Myanmar-Thai', true);
+Map.addLayer(aoiGoldenTriangle, {color: 'orange'}, 'AOI Golden Triangle', true);
+
+// --- Step 7: Display point layers
+Map.addLayer(confirmed, {color: 'red'}, 'Confirmed (Training)', false);
+Map.addLayer(suspected, {color: 'yellow'}, 'Suspected (Testing)', false);
+
+// --- Step 8: Print counts for checking
+print('All sites count', scam_points.size());
+print('Confirmed count', confirmed.size());
+print('Suspected count', suspected.size());
+print('Confirmed Myanmar count', confirmedMyanmar.size());
+print('Confirmed Cambodia count', confirmedCambodia.size());
+print('Suspected Myanmar count', suspectedMyanmar.size());
+print('Suspected Cambodia count', suspectedCambodia.size());
+
+// --- Step 9: Select main AOI for imagery analysis
+var aoi = aoiCambodiaVietnam;
+
+// Show selected AOI clearly
+Map.addLayer(aoi, {color: 'white'}, 'Main AOI', true);
+
+// --- Step 10: Define Sentinel-2 cloud masking function
+function maskS2Clouds(image) {
+  var qa = image.select('QA60');
+
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+    .and(qa.bitwiseAnd(cirrusBitMask).eq(0));
+
+  return image.updateMask(mask).copyProperties(image, image.propertyNames());
+}
+
+// ----- Step 11: Load Sentinel-2 image collection
+var s2Collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterBounds(aoi)
+  .filterDate('2023-01-01', '2023-12-31')
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
+  .map(maskS2Clouds)
+  .select(['B2', 'B3', 'B4', 'B8', 'B11']);
+
+// ----- Step 12: Create Sentinel-2 median composite
+var s2Recent = s2Collection
+  .median()
+  .clip(aoi);
+
+Map.addLayer(
+  s2Recent,
+  {bands: ['B4', 'B3', 'B2'], min: 0, max: 3000},
+  'Sentinel-2 RGB (2023)',
+  false
+);
+
+// ----- Step 13: Print image collection check
+print('Sentinel-2 collection size', s2Collection.size());
+print('Sentinel-2 composite', s2Recent);
+
+// ----- Step 14: Compute NDVI and NDBI
+var ndvi = s2Recent.normalizedDifference(['B8', 'B4']).rename('NDVI');
+var ndbi = s2Recent.normalizedDifference(['B11', 'B8']).rename('NDBI');
+
+// ----- Step 15: Display NDVI and NDBI
+Map.addLayer(
+  ndvi,
+  {min: -1, max: 1, palette: ['brown', 'yellow', 'green']},
+  'NDVI',
+  false
+);
+
+Map.addLayer(
+  ndbi,
+  {min: -1, max: 1, palette: ['blue', 'white', 'red']},
+  'NDBI',
+  false
+);
+
+// ----- Step 16: Print indicator checks
+print('NDVI image', ndvi);
+print('NDBI image', ndbi);
+
+// ----- Step 17: Combine NDVI and NDBI into one image
+var indicators = ndvi.addBands(ndbi);
+
+// ----- Step 18: Extract indicator values at point locations
+var sampledPoints = indicators.sampleRegions({
+  collection: scam_points,
+  properties: ['site_status', 'country'],
+  scale: 10,
+  geometries: true
+});
+
+// ----- Step 19: Inspect sampled data
+print('Sampled points with indicators', sampledPoints.limit(10));
+
+// ----- Step 20: Separate sampling
+var sampledConfirmed = sampledPoints.filter(ee.Filter.eq('site_status', 'confirmed'));
+var sampledSuspected = sampledPoints.filter(ee.Filter.eq('site_status', 'suspected'));
+
+// ----- Step 21: Mean
+// Mean NDVI
+print('Mean NDVI (Confirmed)',
+  sampledConfirmed.aggregate_mean('NDVI'));
+
+print('Mean NDVI (Suspected)',
+  sampledSuspected.aggregate_mean('NDVI'));
+
+// Mean NDBI
+print('Mean NDBI (Confirmed)',
+  sampledConfirmed.aggregate_mean('NDBI'));
+
+print('Mean NDBI (Suspected)',
+  sampledSuspected.aggregate_mean('NDBI'));
