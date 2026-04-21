@@ -1,0 +1,268 @@
+// ============================================================
+// CASA0025 - Analysis 02
+// Candidate Metrics / Stage 2 Refinement
+// Input: candidatePoints from Stage 1 embedding screening
+// ============================================================
+
+
+// ==============================
+// 1. IMPORT DATA
+// ==============================
+//scam site data
+var scam_points_updated = ee.FeatureCollection(
+  "projects/casa0025wk6/assets/scam_points_cleaned"
+);
+
+// Candidate points from Stage 1
+// Replace with your actual exported asset path
+var candidatePoints = ee.FeatureCollection(
+  "projects/casa0025wk6/assets/candidate_points_CambodiaVietnam_2024_p97"
+);
+
+//import metrics table
+var table = ee.FeatureCollection("projects/casa0025wk6/assets/candidate_metrics_CambodiaVietnam_2024");
+
+// ==============================
+// 2. BASIC SETUP
+// ==============================
+var aoi = ee.Geometry.Rectangle([102.0, 10.0, 108.5, 15.5]);
+var aoiName = 'CambodiaVietnam';
+
+var analysisYear = 2024;
+var baselineYear = 2021;
+
+// Buffer size for converting candidate points into site-level zones
+var candidateBufferM = 500;
+
+Map.setCenter(105.0, 12.5, 7);
+Map.setOptions('SATELLITE');
+
+
+// ==============================
+// 3. FILTER POINTS
+// ==============================
+var scam_points_updated_geom = scam_points_updated.map(function(f) {
+  var lon = ee.Number.parse(ee.String(f.get('lon')));
+  var lat = ee.Number.parse(ee.String(f.get('lat')));
+  return f.setGeometry(ee.Geometry.Point([lon, lat]));
+});
+
+var confirmed = scam_points_updated_geom
+  .filter(ee.Filter.eq('site_status', 'confirmed'))
+  .filterBounds(aoi);
+
+var suspected = scam_points_updated_geom
+  .filter(ee.Filter.eq('site_status', 'suspected'))
+  .filterBounds(aoi);
+
+var controls = scam_points_updated_geom
+  .filter(ee.Filter.eq('site_status', 'control'))
+  .filterBounds(aoi);
+
+print('Candidate points count', candidatePoints.size());
+print('Confirmed in AOI', confirmed.size());
+print('Suspected in AOI', suspected.size());
+print('Controls in AOI', controls.size());
+
+Map.addLayer(candidatePoints, {color: 'orange'}, 'Candidate points', true);
+Map.addLayer(confirmed, {color: 'red'}, 'Confirmed', false);
+Map.addLayer(suspected, {color: 'yellow'}, 'Suspected', false);
+Map.addLayer(controls, {color: 'cyan'}, 'Controls', false);
+
+
+// ==============================
+// 4. HELPER FUNCTIONS
+// ==============================
+function maskS2Clouds(image) {
+  var qa = image.select('QA60');
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+    .and(qa.bitwiseAnd(cirrusBitMask).eq(0));
+
+  return image.updateMask(mask).copyProperties(image, image.propertyNames());
+}
+
+function getS2Composite(year, aoi) {
+  var startDate = ee.Date.fromYMD(year, 1, 1);
+  var endDate = startDate.advance(1, 'year');
+
+  return ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+    .filterBounds(aoi)
+    .filterDate(startDate, endDate)
+    .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
+    .map(maskS2Clouds)
+    .select(['B2', 'B3', 'B4', 'B8', 'B11'])
+    .median()
+    .clip(aoi);
+}
+
+function buildS2MetricsImage(yearA, yearB, aoi) {
+  var s2A = getS2Composite(yearA, aoi);
+  var s2B = getS2Composite(yearB, aoi);
+
+  var ndviA = s2A.normalizedDifference(['B8', 'B4']).rename('NDVI_' + yearA);
+  var ndbiA = s2A.normalizedDifference(['B11', 'B8']).rename('NDBI_' + yearA);
+
+  var ndviB = s2B.normalizedDifference(['B8', 'B4']).rename('NDVI_' + yearB);
+  var ndbiB = s2B.normalizedDifference(['B11', 'B8']).rename('NDBI_' + yearB);
+
+  var dNdvi = ndviB.subtract(ndviA).rename('dNDVI_' + yearA + '_' + yearB);
+  var dNdbi = ndbiB.subtract(ndbiA).rename('dNDBI_' + yearA + '_' + yearB);
+
+  return ndviA
+    .addBands(ndbiA)
+    .addBands(ndviB)
+    .addBands(ndbiB)
+    .addBands(dNdvi)
+    .addBands(dNdbi);
+}
+
+// VIIRS monthly DNB dataset has avg_rad and cf_cvg bands.
+// Docs recommend using cf_cvg to judge coverage quality. :contentReference[oaicite:2]{index=2}
+function getAnnualVIIRS(year, aoi) {
+  var startDate = ee.Date.fromYMD(year, 1, 1);
+  var endDate = startDate.advance(1, 'year');
+
+  var viirs = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
+    .filterDate(startDate, endDate)
+    .filterBounds(aoi)
+    .map(function(img) {
+      var masked = img.select('avg_rad')
+        .updateMask(img.select('cf_cvg').gt(0));
+      return masked.copyProperties(img, img.propertyNames());
+    })
+    .mean()
+    .rename('NTL_' + year)
+    .clip(aoi);
+
+  return viirs;
+}
+
+function buildNTLMetricsImage(yearA, yearB, aoi) {
+  var ntlA = getAnnualVIIRS(yearA, aoi);
+  var ntlB = getAnnualVIIRS(yearB, aoi);
+  var dNtl = ntlB.subtract(ntlA).rename('dNTL_' + yearA + '_' + yearB);
+
+  return ntlA.addBands(ntlB).addBands(dNtl);
+}
+
+
+// ==============================
+// 5. BUILD METRICS IMAGE STACK
+// ==============================
+var s2Metrics = buildS2MetricsImage(baselineYear, analysisYear, aoi);
+var ntlMetrics = buildNTLMetricsImage(baselineYear, analysisYear, aoi);
+
+var metricsImage = s2Metrics.addBands(ntlMetrics);
+
+print('Metrics image band names', metricsImage.bandNames());
+
+
+// ==============================
+// 6. CONVERT CANDIDATE POINTS TO BUFFERED ZONES
+// ==============================
+var candidateZones = candidatePoints.map(function(f) {
+  var candidateId = ee.String('cand_').cat(ee.String(f.get('system:index')));
+
+  return f.buffer(candidateBufferM).set({
+    candidate_id: candidateId,
+    source_geom: 'buffer_from_candidate_point',
+    candidate_buffer_m: candidateBufferM
+  });
+});
+
+Map.addLayer(candidateZones, {color: 'lime'}, 'Candidate zones', false);
+
+
+// ==============================
+// 7. REDUCE IMAGE METRICS TO CANDIDATE ZONES
+// ==============================
+// reduceRegions attaches image summaries to each feature. :contentReference[oaicite:3]{index=3}
+var candidateMetrics = metricsImage.reduceRegions({
+  collection: candidateZones,
+  reducer: ee.Reducer.mean(),
+  scale: 30,       // use 30 m for S2 aggregation over site buffers
+  tileScale: 4
+});
+
+//comment out for lighter pressure
+//print('Candidate metrics preview', candidateMetrics.limit(10));
+
+
+// ==============================
+// 8. ADD DISTANCE TO NEAREST CONFIRMED
+// ==============================
+var confirmedGeom = confirmed.geometry();
+
+candidateMetrics = candidateMetrics.map(function(f) {
+  var distToConfirmed = f.geometry().distance(confirmedGeom, 1);
+
+  return f.set({
+    dist_to_confirmed_m: distToConfirmed,
+    aoi_name: aoiName,
+    baseline_year: baselineYear,
+    analysis_year: analysisYear
+  });
+});
+
+//print('Candidate metrics with distance preview', candidateMetrics.limit(10));
+
+
+// ==============================
+// 8.5 CALCULATE AREA AND DISTANCE TO BORDER (Raster Method)
+// (Static spatial metrics for subsequent tiering in 04 script)
+// ==============================
+
+// 1. Import global administrative boundaries and filter by AOI to save memory
+var countries = ee.FeatureCollection("FAO/GAUL/2015/level0").filterBounds(aoi);
+
+// 2. Convert the border polygons into a binary raster image (0 for borders, 1 for elsewhere)
+var borderRaster = ee.Image().byte().paint(countries, 1, 1).unmask(0).not();
+
+// 3. Compute the distance from every pixel to the nearest border (0) in meters
+var distMeters = borderRaster.fastDistanceTransform(1024)
+  .multiply(ee.Image.pixelArea().sqrt())
+  .rename('dist_to_border_m');
+
+// 4. Map over candidate zones to extract the distance and calculate area
+candidateMetrics = candidateMetrics.map(function(f) {
+  // Calculate the area of the buffered candidate zone (in square meters)
+  var areaSqm = f.geometry().area();
+
+  // Sample the distance raster at the centroid of the candidate zone
+  var dist = distMeters.reduceRegion({
+    reducer: ee.Reducer.first(),
+    geometry: f.geometry().centroid(),
+    scale: 100, // 100m resolution for optimal balance between speed and accuracy
+    bestEffort: true
+  }).get('dist_to_border_m');
+
+  // Set the properties (using 99999 as a safe default if distance calculation is null)
+  return f.set({
+    'dist_to_border_m': ee.Number(ee.Algorithms.If(dist, dist, 99999)),
+    'area_sqm': areaSqm
+  });
+});
+
+//print('Candidate metrics with border distance and area', candidateMetrics.limit(10));
+
+
+// ==============================
+// 10. EXPORT
+// ==============================
+// Export candidate-level metrics for review / ranking
+/*
+Export.table.toDrive({
+  collection: candidateMetrics,
+  description: 'candidate_metrics_' + aoiName + '_' + analysisYear,
+  fileFormat: 'CSV'
+});
+
+Export.table.toAsset({
+  collection: candidateMetrics,
+  description: 'candidate_metrics_' + aoiName + '_' + analysisYear,
+  assetId: 'projects/casa0025wk6/assets/candidate_metrics_' + aoiName + '_' + analysisYear
+});
+*/
