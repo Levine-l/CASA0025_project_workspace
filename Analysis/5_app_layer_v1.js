@@ -24,9 +24,9 @@ var candidatePoints = ee.FeatureCollection(
   'projects/casa0025wk6/assets/candidate_points_CambodiaVietnam_2024_p97'
 );
 
-// Stage 2 candidate metrics from Analysis 02
-var candidateMetrics = ee.FeatureCollection(
-  'projects/casa0025wk6/assets/candidate_metrics_CambodiaVietnam_2024'
+// Stage 2 final summary from Analysis 03
+var stage2Summary = ee.FeatureCollection(
+  'projects/casa0025wk6/assets/Final_Summary_Table_Complete'
 );
 
 
@@ -91,26 +91,10 @@ var stage1Ready = candidatePoints.map(function(f) {
 
 // ==============================
 // 4. STAGE 2 READY LAYER
-//    Rebuild tier logic directly from candidate_metrics asset
-//    near_border_flag is retained as auxiliary only
+//    Read final summary directly and add only app fields
 // ==============================
-var stage2Ready = candidateMetrics.map(function(f) {
-  var dNdbi = ee.Number(f.get('dNDBI_2021_2024'));
-  var dNdvi = ee.Number(f.get('dNDVI_2021_2024'));
-  var dNtl = ee.Number(f.get('dNTL_2021_2024'));
+var stage2Ready = stage2Summary.map(function(f) {
   var distBorderRaw = ee.Number(f.get('dist_to_border_m'));
-
-  var developmentFlag = dNdbi.gt(0).and(dNdvi.lt(0));
-  var activityFlag = dNtl.gt(0);
-  var nearBorderFlag = distBorderRaw.lt(10000);
-
-  var highPriority = developmentFlag.and(activityFlag);
-  var mediumPriority = developmentFlag.or(activityFlag);
-
-  var tier = ee.String(ee.Algorithms.If(
-    highPriority, 'high',
-    ee.Algorithms.If(mediumPriority, 'medium', 'low')
-  ));
 
   var candidateId = ee.String(
     ee.Algorithms.If(
@@ -125,10 +109,6 @@ var stage2Ready = candidateMetrics.map(function(f) {
 
   return f.set({
     candidate_id: candidateId,
-    priority_tier: tier,
-    development_flag: developmentFlag,
-    activity_flag: activityFlag,
-    near_border_flag: nearBorderFlag,
     border_distance_valid: borderDistanceValid,
     stage_label: 'Stage 2 - tiered refinement',
     aoi_name: aoiName,
@@ -140,17 +120,17 @@ var stage2Ready = candidateMetrics.map(function(f) {
 var highTier = stage2Ready.filter(ee.Filter.eq('priority_tier', 'high'));
 var mediumTier = stage2Ready.filter(ee.Filter.eq('priority_tier', 'medium'));
 var lowTier = stage2Ready.filter(ee.Filter.eq('priority_tier', 'low'));
-var displayHighTop = stage2Ready
-  .filter(ee.Filter.eq('priority_tier', 'high'))
-  .filter(ee.Filter.lt('dist_to_confirmed_m', 5000))
-  .filter(ee.Filter.gt('NTL_2024', 5))
-  .filter(ee.Filter.gt('dNTL_2021_2024', 0))
+var operationalHighTier = stage2Ready.filter(
+  ee.Filter.eq('operational_priority_tier', 'operational_high')
+);
+var displayHighTop = operationalHighTier
   .sort('dist_to_confirmed_m')
   .limit(200);
 
 print('Stage 1 candidate points', stage1Ready.size());
 print('Stage 2 all refined candidates', stage2Ready.size());
 print('Stage 2 high tier', highTier.size());
+print('Stage 2 operational high tier', operationalHighTier.size());
 print('Stage 2 display high top', displayHighTop.size());
 print('Stage 2 medium tier', mediumTier.size());
 print('Stage 2 low tier', lowTier.size());
@@ -445,6 +425,7 @@ ee.Dictionary({
   controls: controls.size(),
   stage1_points: stage1Ready.size(),
   stage2_all: stage2Ready.size(),
+  operational_high: operationalHighTier.size(),
   display_high_top: displayHighTop.size(),
   high: highTier.size(),
   medium: mediumTier.size(),
@@ -457,6 +438,7 @@ ee.Dictionary({
     'Controls: ' + d.controls + '\n' +
     'Stage 1 points: ' + d.stage1_points + '\n' +
     'Stage 2 all refined: ' + d.stage2_all + '\n' +
+    'Operational high: ' + d.operational_high + '\n' +
     'Display high top (<5 km, NTL>5, dNTL>0): ' + d.display_high_top + '\n' +
     'High: ' + d.high + '\n' +
     'Medium: ' + d.medium + '\n' +
