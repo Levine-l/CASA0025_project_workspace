@@ -1,8 +1,8 @@
-Assets loaded in 5：
+Assets：
 projects/casa0025wk6/assets/scam_points_cleaned
 projects/casa0025wk6/assets/candidate_points_CambodiaVietnam_2024_p97
 projects/casa0025wk6/assets/candidate_metrics_CambodiaVietnam_2024
-
+projects/casa0025wk6/assets/Final_Summary_Table_Complete
 
 each layer means：
 Confirmed = known confirmed scam sites
