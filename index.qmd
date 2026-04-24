@@ -1,0 +1,229 @@
+---
+title-block-banner: images/banner.png
+title: "Scam Compound Explorer"
+subtitle: "Remote Sensing Detection of Suspected Scam Compounds in Southeast Asia"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-title: "Contents"
+    toc-location: left
+    toc-expand: true
+    number-sections: false
+    page-layout: full
+    grid:
+      sidebar-width: 250px
+      body-width: 900px
+      margin-width: 100px
+    css: scam.css
+---
+
+## Project Summary
+
+This project develops a Google Earth Engine (GEE)–based application for researchers
+and human rights monitors to systematically identify and explore spatial patterns of
+suspected scam compounds in Southeast Asia, specifically across the Cambodia–Vietnam
+corridor, Myanmar–Thailand border, and the Golden Triangle region. Referencing data
+from Amnesty International and ASPI, the tool extracts remote sensing indicators of
+involuntary detention infrastructure to screen for high-risk areas. Using 53 confirmed
+locations as a reference sample, the project employs a two-stage similarity-based
+analysis to identify 24,464 candidate zones with similar physical characteristics,
+refined to a shortlist of 15 high-priority locations. The interactive web platform
+enhances spatial communication and supports collaborative documentation, helping
+governments and law enforcement agencies combat criminal networks and protect
+national border security.
+
+---
+
+### Problem Statement
+
+Scam compounds are difficult to systematically detect due to:
+
+- Limited verified ground-truth data
+- Rapid spatial development in border regions
+- Overlap with legitimate urban and commercial environments
+- Inconsistent reporting across NGO and governmental sources
+
+This project supports researchers and policy-oriented users by providing a reproducible,
+satellite-based screening tool grounded in documented reference cases, rather than
+making definitive claims of confirmed presence.
+
+### End User
+
+Our platform is designed for human rights monitoring agencies, investigative journalists,
+and policy-oriented researchers working to combat transnational crime in Southeast Asia.
+Limited public information and complex on-the-ground situations have long hampered the
+effectiveness of international interventions. Our interactive maps significantly enhance
+data accessibility and applicability, fostering collaboration among global stakeholders
+and providing robust spatial evidence to support international initiatives against forced
+labour, human trafficking, and torture.
+
+---
+
+### Data
+
+<!-- TODO: 数据组补充完整数据说明 -->
+
+| Category | Dataset | Description | Source |
+|----------|---------|-------------|--------|
+| Satellite Imagery | Sentinel-2 SR Harmonised | Multispectral imagery for NDBI, NDVI and visual basemap (2021–2024) | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED) |
+| Night-time Lights | VIIRS DNB Monthly | Night-time radiance for activity growth detection (dNTL 2021–2024) | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG) |
+| Boundaries | USDOS LSIB Simple 2017 | Country boundary geometries for AOI definition | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/USDOS_LSIB_SIMPLE_2017) |
+| Boundaries | FAO GAUL 2015 | Province-level administrative boundaries | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/FAO_GAUL_2015_level1) |
+| Reference Sites | Confirmed Scam Locations | 53 confirmed sites from Amnesty International and ASPI | [Amnesty International](https://www.amnesty.org) |
+| Reference Sites | Suspected and Control Points | 45 suspected sites and 22 control points for validation | [ASPI](https://www.aspi.org.au) |
+
+---
+
+### Methodology
+
+<!-- TODO: 分析组补充方法说明 -->
+
+The analysis pipeline operates in two stages:
+
+**Stage 1 — Satellite Embedding Similarity**
+
+A Sentinel-2 median composite (2024, 20 m resolution) is used to compute per-pixel
+spectral similarity against the 53 confirmed reference sites. Areas exceeding the p97
+similarity threshold are retained as Stage 1 candidates, covering approximately 3.7%
+of the Cambodia–Vietnam AOI while capturing all suspected sites and non-reference
+confirmed sites within 500 m.
+
+$$\text{Similarity} = \frac{\sum_{i} w_i \cdot \cos(\mathbf{e}_i, \mathbf{r}_i)}{\sum_{i} w_i}$$
+
+**Stage 2 — Indicator-Based Refinement**
+
+Candidate zones are scored against a metrics stack:
+
+| Indicator | Description |
+|-----------|-------------|
+| dNDBI 2021–2024 | Built-up area growth: $\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}$ |
+| dNTL 2021–2024 | Night-time light radiance growth |
+| dNDVI 2021–2024 | Vegetation loss |
+| dist_to_confirmed_m | Proximity to known confirmed sites |
+| dist_to_border_m | Proximity to national borders |
+
+---
+
+### Interface
+
+<!-- TODO: 截图完成后替换占位说明和图片路径 -->
+
+The application provides a split-panel layout with an interactive map on the right
+and an analysis dashboard on the left. Key interface components include:
+
+:::: {.columns layout-align="center"}
+::: {.column width="46%"}
+![Main Map View](images/screenshot_map.png)
+
+*Candidate density heatmap over the Cambodia–Vietnam AOI with confirmed and
+suspected site markers.*
+:::
+::: {.column width="2%"}
+:::
+::: {.column width="46%"}
+![AOI Dashboard](images/screenshot_dashboard.png)
+
+*AOI Dashboard showing candidate tier distribution.*
+:::
+::::
+
+---
+
+## The Application
+
+<!-- TODO: 替换为发布后的App链接 -->
+
+::: {.column-page}
+<iframe src='https://code.earthengine.google.com/YOUR_CODE_LINK_HERE'
+        width='100%' height='700px'></iframe>
+:::
+
+---
+
+## How it Works
+
+The application is built entirely in Google Earth Engine and operates through a
+two-stage screening pipeline. Below are key code examples illustrating the core logic.
+
+**Stage 1: Computing NDBI Change**
+
+```js
+// Compute NDBI for 2021 and 2024 Sentinel-2 composites
+var s2_2021 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterBounds(aoi)
+  .filterDate('2021-01-01', '2021-12-31')
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
+  .select(['B11', 'B8'])
+  .median();
+
+var ndbi2021 = s2_2021.normalizedDifference(['B11', 'B8']).rename('NDBI');
+var ndbi2024 = s2_2024.normalizedDifference(['B11', 'B8']).rename('NDBI');
+
+// dNDBI: positive values indicate built-up growth
+var dNDBI = ndbi2024.subtract(ndbi2021).rename('dNDBI');
+```
+
+**Stage 2: Candidate Tier Classification**
+
+```js
+// Candidates are scored and classified into tiers
+// High: both development_flag and activity_flag triggered
+// Medium: one flag triggered  
+// Low: neither flag, retained as lower-confidence candidates
+var highCandidates   = candidates.filter(ee.Filter.eq('priority_tier', 'high'));
+var mediumCandidates = candidates.filter(ee.Filter.eq('priority_tier', 'medium'));
+var lowCandidates    = candidates.filter(ee.Filter.eq('priority_tier', 'low'));
+```
+
+**Candidate Density Visualisation**
+
+```js
+// Paint candidate polygons at 1 km scale and apply smoothing kernel
+var painted = ee.Image().byte().paint(candidates, 1)
+  .setDefaultProjection('EPSG:3857', null, 1000);
+
+var kernel = ee.Kernel.square({radius: 12000, units: 'meters', normalize: false});
+
+var densityImage = painted
+  .reduceNeighborhood({reducer: ee.Reducer.sum(), kernel: kernel, optimization: 'boxcar'})
+  .resample('bilinear')
+  .clip(aoi)
+  .selfMask();
+```
+
+The Stage 2 pipeline reduces 24,464 Stage 1 candidates to a shortlist of 15
+high-priority zones by applying distance and night-time light thresholds:
+
+| Tier | Count | Criteria |
+|------|-------|----------|
+| High | 8,425 | Both development and activity flags triggered |
+| Medium | 13,059 | One flag triggered |
+| Low | 2,980 | Neither flag |
+| **Operational shortlist** | **15** | **Strictest distance and NTL conditions** |
+
+![Stage 2 Refinement Pipeline](images/methodology_diagram.png)
+
+---
+
+## References
+
+<!-- TODO: 全组补充完整参考文献 -->
+
+- Amnesty International (2023). *Trapped: The Human Suffering behind the Scam Centres*.
+  London: Amnesty International.
+
+- Australian Strategic Policy Institute (2023). *Mapping the Scam Compound Industry
+  in Southeast Asia*. Canberra: ASPI.
+
+- Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D. and Moore, R.
+  (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone.
+  *Remote Sensing of Environment*, 202, pp.18–27.
+  https://doi.org/10.1016/j.rse.2017.06.031
+  
+<table style="background-color:#60a5fa; width:100vw; margin-left:calc(-50vw + 50%); margin-top:80px; padding:0 40px; box-sizing:border-box; border:none;">
+  <tr>
+    <td style="color:#eff6ff; font-size:12px; text-align:left; border:none; padding:15px 0;">CASA0025 Group Project</td>
+    <td style="color:#eff6ff; font-size:12px; text-align:right; border:none; padding:15px 0;">For all precomputation scripts and main app code, please visit: <a href="https://github.com/你们的仓库链接" style="color:#eff6ff;">GitHub Repository</a></td>
+  </tr>
+</table>
