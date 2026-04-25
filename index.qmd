@@ -20,10 +20,20 @@ format:
 
 ## Project Summary
 
-This project develops a Google Earth Engine (GEE)–based application for exploring candidate locations which spatially similar to documented scam compound sites, and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. 
-This model, referencing data from Amnesty International(2025) and ASPI, extracts remote sensing indicators of involuntary detention infrastructure to identify high-risk areas. There are 53 confirmed locations, and the project employs a similarity-based analysis method to detect 45 suspicious locations with similar physical characteristics. 
-This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform can provides a reproducible satellite-based screening workflow for researchers, journalists and human-rights monitors, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.
+This project develops a Google Earth Engine (GEE)–based application for exploring candidate
+locations which spatially similar to documented scam compound sites, and explore spatial
+patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This
+model, referencing data from Amnesty International(2025) and ASPI, extracts remote sensing
+indicators of involuntary detention infrastructure to identify high-risk areas. Using 53 
+confirmed locations as a reference sample, the project employs a similarity-based analysis 
+method to detect 45 suspicious locations with similar physical characteristics. This dual 
+approach allows for a rigorous comparison between verified sites of human rights abuse and 
+uninvestigated candidate locations. The interactive web platform can provides a reproducible 
+satellite-based screening workflow for researchers, journalists and human-rights monitors, 
+and help governments and law enforcement agencies combat criminal gangs to some extent, and 
+better protect national border security.
 
+![United Nations Office On Grugs and Crime (2023)(2025)，Global Initiative (2026)](image/summary%20picture.jpg){#fig-1 width=100%}
 ---
 
 ### Problem Statement
