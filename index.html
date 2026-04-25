@@ -137,8 +137,7 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#project-summary" id="toc-project-summary" class="nav-link active" data-scroll-target="#project-summary">Project Summary</a></li>
-  <li><a href="#united-nations-office-on-grugs-and-crime-20232025global-initiative-2026" id="toc-united-nations-office-on-grugs-and-crime-20232025global-initiative-2026" class="nav-link" data-scroll-target="#united-nations-office-on-grugs-and-crime-20232025global-initiative-2026"><img src="image/summary%20picture.jpg" id="fig-1" class="img-fluid" style="width:100.0%" alt="United Nations Office On Grugs and Crime (2023)(2025)，Global Initiative (2026)"></a>
+  <li><a href="#project-summary" id="toc-project-summary" class="nav-link active" data-scroll-target="#project-summary">Project Summary</a>
   <ul class="collapse">
   <li><a href="#problem-statement" id="toc-problem-statement" class="nav-link" data-scroll-target="#problem-statement">Problem Statement</a></li>
   <li><a href="#end-user" id="toc-end-user" class="nav-link" data-scroll-target="#end-user">End User</a></li>
@@ -162,10 +161,14 @@ window.Quarto = {
 
 <section id="project-summary" class="level2">
 <h2 class="anchored" data-anchor-id="project-summary">Project Summary</h2>
-<p>This project develops a Google Earth Engine (GEE)–based application for exploring candidate locations which spatially similar to documented scam compound sites, and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This model, referencing data from Amnesty International(2025) and ASPI, extracts remote sensing indicators of involuntary detention infrastructure to identify high-risk areas. There are 53 confirmed locations, and the project employs a similarity-based analysis method to detect 45 suspicious locations with similar physical characteristics. This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform can provides a reproducible satellite-based screening workflow for researchers, journalists and human-rights monitors, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.</p>
-</section>
-<section id="united-nations-office-on-grugs-and-crime-20232025global-initiative-2026" class="level2">
-<h2 class="anchored" data-anchor-id="united-nations-office-on-grugs-and-crime-20232025global-initiative-2026"><img src="image/summary%20picture.jpg" id="fig-1" class="img-fluid" style="width:100.0%" alt="United Nations Office On Grugs and Crime (2023)(2025)，Global Initiative (2026)"></h2>
+<p>This project develops a Google Earth Engine (GEE)–based application for exploring candidate locations which spatially similar to documented scam compound sites, and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This model, referencing data from Amnesty International(2025) and ASPI, extracts remote-sensing indicators associated with compound-like development patterns to identify high-risk areas. The Cambodia–Vietnam analysis contains 53 confirmed reported sites, 45 suspected reported sites, and 22 control points within the AOI. Confirmed sites were used to build a reproducible embedding-based screening workflow, while suspected and control points were used to evaluate whether the output behaved as a broad screening layer or a more selective prioritisation layer. This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform can provides a reproducible satellite-based screening workflow for researchers, journalists and human-rights monitors, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.</p>
+<div style="text-align: center;">
+<p><img src="image/summary%20picture.jpg" class="img-fluid" style="width:100.0%"></p>
+<p style="font-size: 0.9em; margin-top: 0.5em;">
+Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Initiative (2026)
+</p>
+</div>
+<hr>
 <section id="problem-statement" class="level3">
 <h3 class="anchored" data-anchor-id="problem-statement">Problem Statement</h3>
 <p>Scam compounds are difficult to systematically detect due to:</p>
@@ -246,7 +249,7 @@ window.Quarto = {
 <!-- TODO: 分析组补充方法说明 -->
 <p>The analysis pipeline operates in two stages:</p>
 <p><strong>Stage 1 — Satellite Embedding Similarity</strong></p>
-<p>Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity. Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving near-complete known-site coverage.</p>
+<p>Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity. Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving nearly complete known site coverage.</p>
 <p><span class="math display">\[
 s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
       =\sum_{k=0}^{63} e_k(x)r_{j,k}
@@ -284,23 +287,23 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <tbody>
 <tr class="odd">
 <td>dNDBI 2021–2024</td>
-<td>Built-up area growth: <span class="math inline">\(\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}\)</span>; <span class="math inline">\(\Delta NDVI = NDVI_{2024}-NDVI_{2021}\)</span></td>
+<td>Built-up signal change. <span class="math inline">\(\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}\)</span>, and <span class="math inline">\(\Delta NDBI = NDBI_{2024}-NDBI_{2021}\)</span>.</td>
 </tr>
 <tr class="even">
 <td>dNDVI 2021–2024</td>
-<td>Vegetation loss：<span class="math inline">\(\text{NDVI}=\frac{NIR-Red}{NIR+Red}\)</span>; <span class="math inline">\(\Delta NDBI = NDBI_{2024}-NDBI_{2021}\)</span></td>
+<td>Vegetation/greenness change. <span class="math inline">\(\text{NDVI}=\frac{NIR-Red}{NIR+Red}\)</span>, and <span class="math inline">\(\Delta NDVI = NDVI_{2024}-NDVI_{2021}\)</span>.</td>
 </tr>
 <tr class="odd">
 <td>dNTL 2021–2024</td>
-<td>Night-time light radiance growth: <span class="math inline">\(\Delta NTL = NTL_{2024}-NTL_{2021}\)</span></td>
+<td>Night-time light radiance change. <span class="math inline">\(\Delta NTL = NTL_{2024}-NTL_{2021}\)</span> .</td>
 </tr>
 <tr class="even">
 <td>dist_to_confirmed_m</td>
-<td>Proximity to known confirmed sites</td>
+<td>Distance from each candidate zone to the nearest confirmed reported site.</td>
 </tr>
 <tr class="odd">
 <td>dist_to_border_m</td>
-<td>Proximity to national borders</td>
+<td>Distance to the nearest national border (retained as contextual information rather than a hard tiering gate).</td>
 </tr>
 </tbody>
 </table>
@@ -383,26 +386,38 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> meanSimilarity <span class="op">=</span> similarityImages<span class="op">.</span><span class="fu">mean</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Stage 2: Computing NDBI Change</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Compute NDBI for 2021 and 2024 Sentinel-2 composites</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> s2_2021 <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'COPERNICUS/S2_SR_HARMONIZED'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterBounds</span>(aoi)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2021-01-01'</span><span class="op">,</span> <span class="st">'2021-12-31'</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUDY_PIXEL_PERCENTAGE'</span><span class="op">,</span> <span class="dv">30</span>))</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">median</span>()<span class="op">;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndvi2021 <span class="op">=</span> s2_2021<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B8'</span><span class="op">,</span> <span class="st">'B4'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDVI_2021'</span>)<span class="op">;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndvi2024 <span class="op">=</span> s2_2024<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B8'</span><span class="op">,</span> <span class="st">'B4'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDVI_2024'</span>)<span class="op">;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndbi2021 <span class="op">=</span> s2_2021<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI_2021'</span>)<span class="op">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndbi2024 <span class="op">=</span> s2_2024<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI_2024'</span>)<span class="op">;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNDVI <span class="op">=</span> ndvi2024<span class="op">.</span><span class="fu">subtract</span>(ndvi2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDVI_2021_2024'</span>)<span class="op">;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNDBI <span class="op">=</span> ndbi2024<span class="op">.</span><span class="fu">subtract</span>(ndbi2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDBI_2021_2024'</span>)<span class="op">;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNTL <span class="op">=</span> ntl2024<span class="op">.</span><span class="fu">subtract</span>(ntl2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNTL_2021_2024'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Stage 3: Candidate Tier Classification</strong></p>
+<p><strong>Stage 2.1: Computing NDBI Change</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getS2Composite</span>(year<span class="op">,</span> aoi) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> startDate <span class="op">=</span> ee<span class="op">.</span><span class="at">Date</span><span class="op">.</span><span class="fu">fromYMD</span>(year<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> endDate <span class="op">=</span> startDate<span class="op">.</span><span class="fu">advance</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'year'</span>)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'COPERNICUS/S2_SR_HARMONIZED'</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filterBounds</span>(aoi)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filterDate</span>(startDate<span class="op">,</span> endDate)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUDY_PIXEL_PERCENTAGE'</span><span class="op">,</span> <span class="dv">20</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(maskS2Clouds)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">select</span>([<span class="st">'B2'</span><span class="op">,</span> <span class="st">'B3'</span><span class="op">,</span> <span class="st">'B4'</span><span class="op">,</span> <span class="st">'B8'</span><span class="op">,</span> <span class="st">'B11'</span>])</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">median</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">clip</span>(aoi)<span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">buildS2MetricsImage</span>(yearA<span class="op">,</span> yearB<span class="op">,</span> aoi) {</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> s2A <span class="op">=</span> <span class="fu">getS2Composite</span>(yearA<span class="op">,</span> aoi)<span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> s2B <span class="op">=</span> <span class="fu">getS2Composite</span>(yearB<span class="op">,</span> aoi)<span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> ndviA <span class="op">=</span> s2A<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B8'</span><span class="op">,</span> <span class="st">'B4'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDVI_'</span> <span class="op">+</span> yearA)<span class="op">;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> ndviB <span class="op">=</span> s2B<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B8'</span><span class="op">,</span> <span class="st">'B4'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDVI_'</span> <span class="op">+</span> yearB)<span class="op">;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> ndbiA <span class="op">=</span> s2A<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI_'</span> <span class="op">+</span> yearA)<span class="op">;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> ndbiB <span class="op">=</span> s2B<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI_'</span> <span class="op">+</span> yearB)<span class="op">;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNDVI <span class="op">=</span> ndviB<span class="op">.</span><span class="fu">subtract</span>(ndviA)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDVI_'</span> <span class="op">+</span> yearA <span class="op">+</span> <span class="st">'_'</span> <span class="op">+</span> yearB)<span class="op">;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNDBI <span class="op">=</span> ndbiB<span class="op">.</span><span class="fu">subtract</span>(ndbiA)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDBI_'</span> <span class="op">+</span> yearA <span class="op">+</span> <span class="st">'_'</span> <span class="op">+</span> yearB)<span class="op">;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ndviA<span class="op">.</span><span class="fu">addBands</span>(ndviB)<span class="op">.</span><span class="fu">addBands</span>(ndbiA)<span class="op">.</span><span class="fu">addBands</span>(ndbiB)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>              <span class="op">.</span><span class="fu">addBands</span>(dNDVI)<span class="op">.</span><span class="fu">addBands</span>(dNDBI)<span class="op">;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Stage 2.2: Candidate Tier Classification</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Candidates are scored and classified into tiers</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// High: both development_flag and activity_flag triggered</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Medium: one flag triggered  </span></span>
@@ -471,10 +486,13 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <h2 class="anchored" data-anchor-id="references">References</h2>
 <!-- TODO: 全组补充完整参考文献 -->
 <ul>
+<li><p>Amerhauser, K. and Goodwin, A. (2026) A world of deceit: Mapping the landscape of the global scam centre phenomenon. Geneva: Global Initiative Against Transnational Organized Crime. Available at: https://globalinitiative.net/wp-content/uploads/2026/03/Kristina-Amerhauser-Alex-Goodwin-A-world-of-deceit-Mapping-the-landscape-of-the-global-scam-centre-phenomenom-GI-TOC-March-2026.pdf (Accessed: 25 April 2026).</p></li>
 <li><p>Amnesty International (2023). <em>Trapped: The Human Suffering behind the Scam Centres</em>. London: Amnesty International.</p></li>
+<li><p>Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr.&nbsp;2026].</p></li>
 <li><p>Australian Strategic Policy Institute (2023). <em>Mapping the Scam Compound Industry in Southeast Asia</em>. Canberra: ASPI.</p></li>
 <li><p>Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D. and Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. <em>Remote Sensing of Environment</em>, 202, pp.18–27. https://doi.org/10.1016/j.rse.2017.06.031</p></li>
-<li><p>Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr.&nbsp;2026].</p></li>
+<li><p>UNODC (2023) Trafficking in Persons for the Purpose of Forced Criminality: Summary Policy Brief. Available at: https://www.unodc.org/roseap/uploads/documents/Publications/2023/TiP_for_FC_Summary_Policy_Brief.pdf (Accessed: 25 April 2026).</p></li>
+<li><p>UNODC (2025) Inflection Point: Transnational Organized Crime and the Changing Landscape of Cyber-Enabled Fraud in Southeast Asia. Available at: https://www.unodc.org/roseap/uploads/documents/Publications/2025/Inflection_Point_2025.pdf (Accessed: 25 April 2026).</p></li>
 </ul>
 <table style="background-color:#60a5fa; width:100vw; margin-left:calc(-50vw + 50%); margin-top:80px; padding:0 40px; box-sizing:border-box; border:none;">
 <tbody><tr>

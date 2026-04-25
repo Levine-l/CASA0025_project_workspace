@@ -128,9 +128,9 @@ Candidate zones are scored against a metrics stack:
 
 | Indicator | Description |
 |-----------|-------------|
-| dNDBI 2021–2024 | Built-up signal change. \( \text{NDBI} = \frac{SWIR - NIR}{SWIR + NIR} \), and \( \Delta \text{NDBI} = \text{NDBI}_{2024} - \text{NDBI}_{2021} \). |
-| dNDVI 2021–2024 | Vegetation/greenness change. \( \text{NDVI} = \frac{NIR - Red}{NIR + Red} \), and \( \Delta \text{NDVI} = \text{NDVI}_{2024} - \text{NDVI}_{2021} \). |
-| dNTL 2021–2024 | Night-time light radiance change. \( \Delta \text{NTL} = \text{NTL}_{2024} - \text{NTL}_{2021} \). |
+| dNDBI 2021–2024 | Built-up signal change. $\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}$, and $\Delta NDBI = NDBI_{2024}-NDBI_{2021}$. |
+| dNDVI 2021–2024 | Vegetation/greenness change. $\text{NDVI}=\frac{NIR-Red}{NIR+Red}$, and $\Delta NDVI = NDVI_{2024}-NDVI_{2021}$. |
+| dNTL 2021–2024 | Night-time light radiance change. $\Delta NTL = NTL_{2024}-NTL_{2021}$. |
 | dist_to_confirmed_m | Distance from each candidate zone to the nearest confirmed reported site. |
 | dist_to_border_m | Distance to the nearest national border (retained as contextual information rather than a hard tiering gate). |
 
@@ -218,31 +218,42 @@ var meanSimilarity = similarityImages.mean();
 ```
 
 
-**Stage 2: Computing NDBI Change**
+**Stage 2.1: Computing NDBI Change**
 
 ```js
-// Compute NDBI for 2021 and 2024 Sentinel-2 composites
-var s2_2021 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
-  .filterBounds(aoi)
-  .filterDate('2021-01-01', '2021-12-31')
-  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
-  .select(['B11', 'B8'])
-  .median();
+function getS2Composite(year, aoi) {
+  var startDate = ee.Date.fromYMD(year, 1, 1);
+  var endDate = startDate.advance(1, 'year');
 
+  return ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+    .filterBounds(aoi)
+    .filterDate(startDate, endDate)
+    .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
+    .map(maskS2Clouds)
+    .select(['B2', 'B3', 'B4', 'B8', 'B11'])
+    .median()
+    .clip(aoi);
+}
 
-var ndvi2021 = s2_2021.normalizedDifference(['B8', 'B4']).rename('NDVI_2021');
-var ndvi2024 = s2_2024.normalizedDifference(['B8', 'B4']).rename('NDVI_2024');
+function buildS2MetricsImage(yearA, yearB, aoi) {
+  var s2A = getS2Composite(yearA, aoi);
+  var s2B = getS2Composite(yearB, aoi);
 
-var ndbi2021 = s2_2021.normalizedDifference(['B11', 'B8']).rename('NDBI_2021');
-var ndbi2024 = s2_2024.normalizedDifference(['B11', 'B8']).rename('NDBI_2024');
+  var ndviA = s2A.normalizedDifference(['B8', 'B4']).rename('NDVI_' + yearA);
+  var ndviB = s2B.normalizedDifference(['B8', 'B4']).rename('NDVI_' + yearB);
 
-var dNDVI = ndvi2024.subtract(ndvi2021).rename('dNDVI_2021_2024');
-var dNDBI = ndbi2024.subtract(ndbi2021).rename('dNDBI_2021_2024');
-var dNTL = ntl2024.subtract(ntl2021).rename('dNTL_2021_2024');
+  var ndbiA = s2A.normalizedDifference(['B11', 'B8']).rename('NDBI_' + yearA);
+  var ndbiB = s2B.normalizedDifference(['B11', 'B8']).rename('NDBI_' + yearB);
 
+  var dNDVI = ndviB.subtract(ndviA).rename('dNDVI_' + yearA + '_' + yearB);
+  var dNDBI = ndbiB.subtract(ndbiA).rename('dNDBI_' + yearA + '_' + yearB);
+
+  return ndviA.addBands(ndviB).addBands(ndbiA).addBands(ndbiB)
+              .addBands(dNDVI).addBands(dNDBI);
+}
 ```
 
-**Stage 3: Candidate Tier Classification**
+**Stage 2.2: Candidate Tier Classification**
 
 ```js
 // Candidates are scored and classified into tiers
