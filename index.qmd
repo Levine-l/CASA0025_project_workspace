@@ -92,8 +92,12 @@ The analysis pipeline operates in two stages:
 
 **Stage 1 — Satellite Embedding Similarity**
 
-Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity.
-Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving near-complete known-site coverage.
+Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented 
+by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and 
+each pixel in the AOI is compared to these references using dot-product similarity.
+Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, 
+because it produced a tighter screening layer than p95 while preserving nearly complete known 
+site coverage.
 
 $$
 s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
@@ -124,11 +128,11 @@ Candidate zones are scored against a metrics stack:
 
 | Indicator | Description |
 |-----------|-------------|
-| dNDBI 2021–2024 | Built-up area growth: $\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}$; $\Delta NDVI = NDVI_{2024}-NDVI_{2021}$ |
-| dNDVI 2021–2024 | Vegetation loss：$\text{NDVI}=\frac{NIR-Red}{NIR+Red}$; $\Delta NDBI = NDBI_{2024}-NDBI_{2021}$ |
-| dNTL 2021–2024 | Night-time light radiance growth: $\Delta NTL = NTL_{2024}-NTL_{2021}$ |
-| dist_to_confirmed_m | Proximity to known confirmed sites |
-| dist_to_border_m | Proximity to national borders |
+| dNDBI 2021–2024 | Built-up signal change. \( \text{NDBI} = \frac{SWIR - NIR}{SWIR + NIR} \), and \( \Delta \text{NDBI} = \text{NDBI}_{2024} - \text{NDBI}_{2021} \). |
+| dNDVI 2021–2024 | Vegetation/greenness change. \( \text{NDVI} = \frac{NIR - Red}{NIR + Red} \), and \( \Delta \text{NDVI} = \text{NDVI}_{2024} - \text{NDVI}_{2021} \). |
+| dNTL 2021–2024 | Night-time light radiance change. \( \Delta \text{NTL} = \text{NTL}_{2024} - \text{NTL}_{2021} \). |
+| dist_to_confirmed_m | Distance from each candidate zone to the nearest confirmed reported site. |
+| dist_to_border_m | Distance to the nearest national border (retained as contextual information rather than a hard tiering gate). |
 
 ---
 
