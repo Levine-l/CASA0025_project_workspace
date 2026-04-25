@@ -20,18 +20,7 @@ format:
 
 ## Project Summary
 
-This project develops a Google Earth Engine (GEE)–based application for researchers
-and human rights monitors to systematically identify and explore spatial patterns of
-suspected scam compounds in Southeast Asia, specifically across the Cambodia–Vietnam
-corridor, Myanmar–Thailand border, and the Golden Triangle region. Referencing data
-from Amnesty International and ASPI, the tool extracts remote sensing indicators of
-involuntary detention infrastructure to screen for high-risk areas. Using 53 confirmed
-locations as a reference sample, the project employs a two-stage similarity-based
-analysis to identify 24,464 candidate zones with similar physical characteristics,
-refined to a shortlist of 15 high-priority locations. The interactive web platform
-enhances spatial communication and supports collaborative documentation, helping
-governments and law enforcement agencies combat criminal networks and protect
-national border security.
+This project develops a Google Earth Engine (GEE)–based application for researchers and human rights monitors to systematically identify and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This model, referencing data from Amnesty International(2025) and ASPI, extracts remote sensing indicators of involuntary detention infrastructure to identify high-risk areas. Using 53 confirmed locations as a reference sample, the project employs a similarity-based analysis method to detect 45 suspicious locations with similar physical characteristics. This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform enhances spatial communication and supports collaborative documentation, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.
 
 ---
 
@@ -220,6 +209,9 @@ high-priority zones by applying distance and night-time light thresholds:
   (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone.
   *Remote Sensing of Environment*, 202, pp.18–27.
   https://doi.org/10.1016/j.rse.2017.06.031
+
+- Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr. 2026].
+
   
 <table style="background-color:#60a5fa; width:100vw; margin-left:calc(-50vw + 50%); margin-top:80px; padding:0 40px; box-sizing:border-box; border:none;">
   <tr>
