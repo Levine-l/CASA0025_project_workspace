@@ -346,8 +346,34 @@ var heldOutSummaries = ee.FeatureCollection(
 // Merge into one exportable validation table
 var validationSummary = ee.FeatureCollection([currentSummary]).merge(heldOutSummaries);
 
+var currentSummaryFields = [
+  'run_id',
+  'reference_limit',
+  'reference_samples_count',
+  'threshold_percentile',
+  'threshold_value',
+  'matched_area_m2',
+  'matched_area_share_of_aoi',
+  'suspected_in_aoi',
+  'suspected_raster_hit_500m',
+  'suspected_raster_hit_1000m',
+  'non_reference_confirmed_in_aoi',
+  'non_reference_confirmed_raster_hit_500m',
+  'non_reference_confirmed_raster_hit_1000m',
+  'controls_in_aoi',
+  'controls_raster_hit_500m',
+  'controls_raster_hit_1000m',
+  'controls_hit_rate_500m',
+  'controls_hit_rate_1000m'
+];
+
 print('Validation summary table', validationSummary);
 print('Current screening summary', currentSummary);
+print('Current screening summary fields', currentSummary.toDictionary(currentSummaryFields));
+print(
+  'Current screening summary one-row table',
+  ee.FeatureCollection([currentSummary]).select(currentSummaryFields)
+);
 print('Held-out summaries', heldOutSummaries);
 
 
