@@ -33,10 +33,10 @@ workflow for researchers, journalists and human-rights monitors, and help govern
 enforcement agencies combat criminal gangs to some extent, and better protect national border 
 security.
 
-::: {#fig-1}
+::: {style="text-align: center;"}
 ![](image/summary%20picture.jpg){width=100%}
 
-United Nations Office on Drugs and Crime (2023, 2025), Global Initiative (2026)
+<p style="font-size: 0.9em; margin-top: 0.5em;">Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Initiative (2026)</p>
 :::
 
 ---
