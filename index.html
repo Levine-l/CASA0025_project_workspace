@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Scam Compound Explorer</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -61,15 +64,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="index_files/libs/clipboard/clipboard.min.js"></script>
 <script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="index_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="index_files/libs/quarto-html/popper.min.js"></script>
 <script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="index_files/libs/quarto-html/anchor.min.js"></script>
 <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-d6552112e4a4d773edfeaf4c4adae3f7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/bootstrap/bootstrap-ed73768c0861347bf31ab77e72883946.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <style>
 
       .quarto-title-block .quarto-title-banner {
@@ -78,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -159,7 +161,7 @@ window.Quarto = {
 
 <section id="project-summary" class="level2">
 <h2 class="anchored" data-anchor-id="project-summary">Project Summary</h2>
-<p>This project develops a Google Earth Engine (GEE)–based application for researchers and human rights monitors to systematically identify and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically across the Cambodia–Vietnam corridor, Myanmar–Thailand border, and the Golden Triangle region. Referencing data from Amnesty International and ASPI, the tool extracts remote sensing indicators of involuntary detention infrastructure to screen for high-risk areas. Using 53 confirmed locations as a reference sample, the project employs a two-stage similarity-based analysis to identify 24,464 candidate zones with similar physical characteristics, refined to a shortlist of 15 high-priority locations. The interactive web platform enhances spatial communication and supports collaborative documentation, helping governments and law enforcement agencies combat criminal networks and protect national border security.</p>
+<p>This project develops a Google Earth Engine (GEE)–based application for exploring candidate locations which spatially similar to documented scam compound sites, and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This model, referencing data from Amnesty International(2025) and ASPI, extracts remote sensing indicators of involuntary detention infrastructure to identify high-risk areas. There are 53 confirmed locations, and the project employs a similarity-based analysis method to detect 45 suspicious locations with similar physical characteristics. This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform can provides a reproducible satellite-based screening workflow for researchers, journalists and human-rights monitors, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.</p>
 <hr>
 <section id="problem-statement" class="level3">
 <h3 class="anchored" data-anchor-id="problem-statement">Problem Statement</h3>
@@ -191,36 +193,42 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
+<td>Satellite Embedding</td>
+<td>Google Satellite Embedding V1 Annual</td>
+<td>64-dimensional annual embedding vectors at 10 m resolution, used for Stage 1 similarity search</td>
+<td><a href="https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL">GEE Catalog</a></td>
+</tr>
+<tr class="even">
 <td>Satellite Imagery</td>
 <td>Sentinel-2 SR Harmonised</td>
 <td>Multispectral imagery for NDBI, NDVI and visual basemap (2021–2024)</td>
 <td><a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED">GEE Catalog</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Night-time Lights</td>
 <td>VIIRS DNB Monthly</td>
 <td>Night-time radiance for activity growth detection (dNTL 2021–2024)</td>
 <td><a href="https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG">GEE Catalog</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Boundaries</td>
 <td>USDOS LSIB Simple 2017</td>
 <td>Country boundary geometries for AOI definition</td>
 <td><a href="https://developers.google.com/earth-engine/datasets/catalog/USDOS_LSIB_SIMPLE_2017">GEE Catalog</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Boundaries</td>
 <td>FAO GAUL 2015</td>
 <td>Province-level administrative boundaries</td>
 <td><a href="https://developers.google.com/earth-engine/datasets/catalog/FAO_GAUL_2015_level1">GEE Catalog</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Reference Sites</td>
 <td>Confirmed Scam Locations</td>
 <td>53 confirmed sites from Amnesty International and ASPI</td>
 <td><a href="https://www.amnesty.org">Amnesty International</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Reference Sites</td>
 <td>Suspected and Control Points</td>
 <td>45 suspected sites and 22 control points for validation</td>
@@ -235,8 +243,28 @@ window.Quarto = {
 <!-- TODO: 分析组补充方法说明 -->
 <p>The analysis pipeline operates in two stages:</p>
 <p><strong>Stage 1 — Satellite Embedding Similarity</strong></p>
-<p>A Sentinel-2 median composite (2024, 20 m resolution) is used to compute per-pixel spectral similarity against the 53 confirmed reference sites. Areas exceeding the p97 similarity threshold are retained as Stage 1 candidates, covering approximately 3.7% of the Cambodia–Vietnam AOI while capturing all suspected sites and non-reference confirmed sites within 500 m.</p>
-<p><span class="math display">\[\text{Similarity} = \frac{\sum_{i} w_i \cdot \cos(\mathbf{e}_i, \mathbf{r}_i)}{\sum_{i} w_i}\]</span></p>
+<p>Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity. Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving near-complete known-site coverage.</p>
+<p><span class="math display">\[
+s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
+      =\sum_{k=0}^{63} e_k(x)r_{j,k}
+\]</span></p>
+<p><span class="math display">\[
+S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
+\]</span></p>
+<p><span class="math display">\[
+\text{Stage 1 candidate}(x)=
+\begin{cases}
+1, &amp; S(x)\geq P_{97}(S) \\
+0, &amp; S(x)&lt;P_{97}(S)
+\end{cases}
+\]</span></p>
+<ul>
+<li>x is a pixel within the AOI;</li>
+<li>e(x) is the 64-dimensional embedding vector of that pixel;</li>
+<li>rj is the embedding vector of the j-th confirmed reference sample;</li>
+<li>J is the current number of reference samples;</li>
+<li>S(x) is the final mean similarity image.</li>
+</ul>
 <p><strong>Stage 2 — Indicator-Based Refinement</strong></p>
 <p>Candidate zones are scored against a metrics stack:</p>
 <table class="caption-top table">
@@ -253,15 +281,15 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td>dNDBI 2021–2024</td>
-<td>Built-up area growth: <span class="math inline">\(\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}\)</span></td>
+<td>Built-up area growth: <span class="math inline">\(\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}\)</span>; <span class="math inline">\(\Delta NDVI = NDVI_{2024}-NDVI_{2021}\)</span></td>
 </tr>
 <tr class="even">
-<td>dNTL 2021–2024</td>
-<td>Night-time light radiance growth</td>
+<td>dNDVI 2021–2024</td>
+<td>Vegetation loss：<span class="math inline">\(\text{NDVI}=\frac{NIR-Red}{NIR+Red}\)</span>; <span class="math inline">\(\Delta NDBI = NDBI_{2024}-NDBI_{2021}\)</span></td>
 </tr>
 <tr class="odd">
-<td>dNDVI 2021–2024</td>
-<td>Vegetation loss</td>
+<td>dNTL 2021–2024</td>
+<td>Night-time light radiance growth: <span class="math inline">\(\Delta NTL = NTL_{2024}-NTL_{2021}\)</span></td>
 </tr>
 <tr class="even">
 <td>dist_to_confirmed_m</td>
@@ -315,40 +343,82 @@ window.Quarto = {
 <section id="how-it-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-it-works">How it Works</h2>
 <p>The application is built entirely in Google Earth Engine and operates through a two-stage screening pipeline. Below are key code examples illustrating the core logic.</p>
-<p><strong>Stage 1: Computing NDBI Change</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Compute NDBI for 2021 and 2024 Sentinel-2 composites</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> s2_2021 <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'COPERNICUS/S2_SR_HARMONIZED'</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterBounds</span>(aoi)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2021-01-01'</span><span class="op">,</span> <span class="st">'2021-12-31'</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUDY_PIXEL_PERCENTAGE'</span><span class="op">,</span> <span class="dv">30</span>))</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">median</span>()<span class="op">;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndbi2021 <span class="op">=</span> s2_2021<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI'</span>)<span class="op">;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndbi2024 <span class="op">=</span> s2_2024<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI'</span>)<span class="op">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">// dNDBI: positive values indicate built-up growth</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNDBI <span class="op">=</span> ndbi2024<span class="op">.</span><span class="fu">subtract</span>(ndbi2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDBI'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Stage 2: Candidate Tier Classification</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Candidates are scored and classified into tiers</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// High: both development_flag and activity_flag triggered</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Medium: one flag triggered  </span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Low: neither flag, retained as lower-confidence candidates</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> highCandidates   <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'high'</span>))<span class="op">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> mediumCandidates <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'medium'</span>))<span class="op">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> lowCandidates    <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'low'</span>))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Stage 1: Embedding Similarity</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> embeddings <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL'</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> embeddingImage <span class="op">=</span> embeddings</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">date</span>(startDate<span class="op">,</span> endDate))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">mosaic</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">clip</span>(analysisGeometry)<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> sampleEmbeddings <span class="op">=</span> embeddingImage<span class="op">.</span><span class="fu">sampleRegions</span>({</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">collection</span><span class="op">:</span> referenceSamples<span class="op">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">scale</span><span class="op">:</span> sampleScale<span class="op">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">geometries</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">tileScale</span><span class="op">:</span> <span class="dv">4</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> similarityImages <span class="op">=</span> ee<span class="op">.</span><span class="at">ImageCollection</span><span class="op">.</span><span class="fu">fromImages</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  sampleEmbeddings<span class="op">.</span><span class="fu">toList</span>(sampleEmbeddings<span class="op">.</span><span class="fu">size</span>())<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(f) {</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> ee<span class="op">.</span><span class="fu">Feature</span>(f)<span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> sampleValues <span class="op">=</span> ee<span class="op">.</span><span class="fu">List</span>(</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      bandNames<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(b) {</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> f<span class="op">.</span><span class="fu">get</span>(ee<span class="op">.</span><span class="fu">String</span>(b))<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> sampleVectorImage <span class="op">=</span> ee<span class="op">.</span><span class="at">Image</span><span class="op">.</span><span class="fu">constant</span>(sampleValues)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">rename</span>(bandNames)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">toFloat</span>()<span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sampleVectorImage</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">multiply</span>(embeddingImage)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">reduce</span>(ee<span class="op">.</span><span class="at">Reducer</span><span class="op">.</span><span class="fu">sum</span>())</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">rename</span>(<span class="st">'similarity'</span>)<span class="op">;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> meanSimilarity <span class="op">=</span> similarityImages<span class="op">.</span><span class="fu">mean</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Stage 2: Computing NDBI Change</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Compute NDBI for 2021 and 2024 Sentinel-2 composites</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> s2_2021 <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'COPERNICUS/S2_SR_HARMONIZED'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterBounds</span>(aoi)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2021-01-01'</span><span class="op">,</span> <span class="st">'2021-12-31'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUDY_PIXEL_PERCENTAGE'</span><span class="op">,</span> <span class="dv">30</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">median</span>()<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndvi2021 <span class="op">=</span> s2_2021<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B8'</span><span class="op">,</span> <span class="st">'B4'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDVI_2021'</span>)<span class="op">;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndvi2024 <span class="op">=</span> s2_2024<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B8'</span><span class="op">,</span> <span class="st">'B4'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDVI_2024'</span>)<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndbi2021 <span class="op">=</span> s2_2021<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI_2021'</span>)<span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> ndbi2024 <span class="op">=</span> s2_2024<span class="op">.</span><span class="fu">normalizedDifference</span>([<span class="st">'B11'</span><span class="op">,</span> <span class="st">'B8'</span>])<span class="op">.</span><span class="fu">rename</span>(<span class="st">'NDBI_2024'</span>)<span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNDVI <span class="op">=</span> ndvi2024<span class="op">.</span><span class="fu">subtract</span>(ndvi2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDVI_2021_2024'</span>)<span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNDBI <span class="op">=</span> ndbi2024<span class="op">.</span><span class="fu">subtract</span>(ndbi2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNDBI_2021_2024'</span>)<span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dNTL <span class="op">=</span> ntl2024<span class="op">.</span><span class="fu">subtract</span>(ntl2021)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'dNTL_2021_2024'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Stage 3: Candidate Tier Classification</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Candidates are scored and classified into tiers</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// High: both development_flag and activity_flag triggered</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Medium: one flag triggered  </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Low: neither flag, retained as lower-confidence candidates</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> highCandidates   <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'high'</span>))<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> mediumCandidates <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'medium'</span>))<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> lowCandidates    <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'low'</span>))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Candidate Density Visualisation</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Paint candidate polygons at 1 km scale and apply smoothing kernel</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> painted <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>()<span class="op">.</span><span class="fu">byte</span>()<span class="op">.</span><span class="fu">paint</span>(candidates<span class="op">,</span> <span class="dv">1</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">setDefaultProjection</span>(<span class="st">'EPSG:3857'</span><span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">1000</span>)<span class="op">;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> kernel <span class="op">=</span> ee<span class="op">.</span><span class="at">Kernel</span><span class="op">.</span><span class="fu">square</span>({<span class="dt">radius</span><span class="op">:</span> <span class="dv">12000</span><span class="op">,</span> <span class="dt">units</span><span class="op">:</span> <span class="st">'meters'</span><span class="op">,</span> <span class="dt">normalize</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> densityImage <span class="op">=</span> painted</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">reduceNeighborhood</span>({<span class="dt">reducer</span><span class="op">:</span> ee<span class="op">.</span><span class="at">Reducer</span><span class="op">.</span><span class="fu">sum</span>()<span class="op">,</span> <span class="dt">kernel</span><span class="op">:</span> kernel<span class="op">,</span> <span class="dt">optimization</span><span class="op">:</span> <span class="st">'boxcar'</span>})</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">resample</span>(<span class="st">'bilinear'</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">clip</span>(aoi)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">selfMask</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Paint candidate polygons at 1 km scale and apply smoothing kernel</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> painted <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>()<span class="op">.</span><span class="fu">byte</span>()<span class="op">.</span><span class="fu">paint</span>(candidates<span class="op">,</span> <span class="dv">1</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">setDefaultProjection</span>(<span class="st">'EPSG:3857'</span><span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">1000</span>)<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> kernel <span class="op">=</span> ee<span class="op">.</span><span class="at">Kernel</span><span class="op">.</span><span class="fu">square</span>({<span class="dt">radius</span><span class="op">:</span> <span class="dv">12000</span><span class="op">,</span> <span class="dt">units</span><span class="op">:</span> <span class="st">'meters'</span><span class="op">,</span> <span class="dt">normalize</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> densityImage <span class="op">=</span> painted</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">reduceNeighborhood</span>({<span class="dt">reducer</span><span class="op">:</span> ee<span class="op">.</span><span class="at">Reducer</span><span class="op">.</span><span class="fu">sum</span>()<span class="op">,</span> <span class="dt">kernel</span><span class="op">:</span> kernel<span class="op">,</span> <span class="dt">optimization</span><span class="op">:</span> <span class="st">'boxcar'</span>})</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">resample</span>(<span class="st">'bilinear'</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">clip</span>(aoi)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">selfMask</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The Stage 2 pipeline reduces 24,464 Stage 1 candidates to a shortlist of 15 high-priority zones by applying distance and night-time light thresholds:</p>
 <table class="caption-top table">
 <colgroup>
@@ -401,6 +471,7 @@ window.Quarto = {
 <li><p>Amnesty International (2023). <em>Trapped: The Human Suffering behind the Scam Centres</em>. London: Amnesty International.</p></li>
 <li><p>Australian Strategic Policy Institute (2023). <em>Mapping the Scam Compound Industry in Southeast Asia</em>. Canberra: ASPI.</p></li>
 <li><p>Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D. and Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. <em>Remote Sensing of Environment</em>, 202, pp.18–27. https://doi.org/10.1016/j.rse.2017.06.031</p></li>
+<li><p>Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr.&nbsp;2026].</p></li>
 </ul>
 <table style="background-color:#60a5fa; width:100vw; margin-left:calc(-50vw + 50%); margin-top:80px; padding:0 40px; box-sizing:border-box; border:none;">
 <tbody><tr>

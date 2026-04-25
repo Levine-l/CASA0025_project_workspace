@@ -20,8 +20,9 @@ format:
 
 ## Project Summary
 
-This project develops a Google Earth Engine (GEE)–based application for exploring candidate locations which spatially similar to documented scam compound sites, and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This model, referencing data from 
-Amnesty International(2025) and ASPI, extracts remote sensing indicators of involuntary detention infrastructure to identify high-risk areas. Using 53 confirmed locations as a reference sample, the project employs a similarity-based analysis method to detect 45 suspicious locations with similar physical characteristics. This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform can provides a reproducible satellite-based screening workflow for researchers, journalists and human-rights monitors, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.
+This project develops a Google Earth Engine (GEE)–based application for exploring candidate locations which spatially similar to documented scam compound sites, and explore spatial patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. 
+This model, referencing data from Amnesty International(2025) and ASPI, extracts remote sensing indicators of involuntary detention infrastructure to identify high-risk areas. There are 53 confirmed locations, and the project employs a similarity-based analysis method to detect 45 suspicious locations with similar physical characteristics. 
+This dual approach allows for a rigorous comparison between verified sites of human rights abuse and uninvestigated candidate locations. The interactive web platform can provides a reproducible satellite-based screening workflow for researchers, journalists and human-rights monitors, and help governments and law enforcement agencies combat criminal gangs to some extent, and better protect national border security.
 
 ---
 
@@ -107,7 +108,7 @@ Candidate zones are scored against a metrics stack:
 | Indicator | Description |
 |-----------|-------------|
 | dNDBI 2021–2024 | Built-up area growth: $\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}$; $\Delta NDVI = NDVI_{2024}-NDVI_{2021}$ |
-| dNDVI 2021–2024 | Vegetation loss：$\test{NDVI}=\frac{NIR-Red}{NIR+Red}$; $\Delta NDBI = NDBI_{2024}-NDBI_{2021}$ |
+| dNDVI 2021–2024 | Vegetation loss：$\text{NDVI}=\frac{NIR-Red}{NIR+Red}$; $\Delta NDBI = NDBI_{2024}-NDBI_{2021}$ |
 | dNTL 2021–2024 | Night-time light radiance growth: $\Delta NTL = NTL_{2024}-NTL_{2021}$ |
 | dist_to_confirmed_m | Proximity to known confirmed sites |
 | dist_to_border_m | Proximity to national borders |
@@ -157,7 +158,42 @@ two-stage screening pipeline. Below are key code examples illustrating the core 
 
 **Stage 1: Embedding Similarity**
 ```js
+var embeddings = ee.ImageCollection('GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL');
 
+var embeddingImage = embeddings
+  .filter(ee.Filter.date(startDate, endDate))
+  .mosaic()
+  .clip(analysisGeometry);
+
+var sampleEmbeddings = embeddingImage.sampleRegions({
+  collection: referenceSamples,
+  scale: sampleScale,
+  geometries: false,
+  tileScale: 4
+});
+
+var similarityImages = ee.ImageCollection.fromImages(
+  sampleEmbeddings.toList(sampleEmbeddings.size()).map(function(f) {
+    f = ee.Feature(f);
+
+    var sampleValues = ee.List(
+      bandNames.map(function(b) {
+        return f.get(ee.String(b));
+      })
+    );
+
+    var sampleVectorImage = ee.Image.constant(sampleValues)
+      .rename(bandNames)
+      .toFloat();
+
+    return sampleVectorImage
+      .multiply(embeddingImage)
+      .reduce(ee.Reducer.sum())
+      .rename('similarity');
+  })
+);
+
+var meanSimilarity = similarityImages.mean();
 ```
 
 
@@ -172,11 +208,17 @@ var s2_2021 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
   .select(['B11', 'B8'])
   .median();
 
-var ndbi2021 = s2_2021.normalizedDifference(['B11', 'B8']).rename('NDBI');
-var ndbi2024 = s2_2024.normalizedDifference(['B11', 'B8']).rename('NDBI');
 
-// dNDBI: positive values indicate built-up growth
-var dNDBI = ndbi2024.subtract(ndbi2021).rename('dNDBI');
+var ndvi2021 = s2_2021.normalizedDifference(['B8', 'B4']).rename('NDVI_2021');
+var ndvi2024 = s2_2024.normalizedDifference(['B8', 'B4']).rename('NDVI_2024');
+
+var ndbi2021 = s2_2021.normalizedDifference(['B11', 'B8']).rename('NDBI_2021');
+var ndbi2024 = s2_2024.normalizedDifference(['B11', 'B8']).rename('NDBI_2024');
+
+var dNDVI = ndvi2024.subtract(ndvi2021).rename('dNDVI_2021_2024');
+var dNDBI = ndbi2024.subtract(ndbi2021).rename('dNDBI_2021_2024');
+var dNTL = ntl2024.subtract(ntl2021).rename('dNTL_2021_2024');
+
 ```
 
 **Stage 3: Candidate Tier Classification**
