@@ -56,6 +56,7 @@ labour, human trafficking, and torture.
 
 | Category | Dataset | Description | Source |
 |----------|---------|-------------|--------|
+| Satellite Embedding | Google Satellite Embedding V1 Annual | 64-dimensional annual embedding vectors at 10 m resolution, used for Stage 1 similarity search | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL) |
 | Satellite Imagery | Sentinel-2 SR Harmonised | Multispectral imagery for NDBI, NDVI and visual basemap (2021–2024) | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED) |
 | Night-time Lights | VIIRS DNB Monthly | Night-time radiance for activity growth detection (dNTL 2021–2024) | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG) |
 | Boundaries | USDOS LSIB Simple 2017 | Country boundary geometries for AOI definition | [GEE Catalog](https://developers.google.com/earth-engine/datasets/catalog/USDOS_LSIB_SIMPLE_2017) |
@@ -73,11 +74,8 @@ The analysis pipeline operates in two stages:
 
 **Stage 1 — Satellite Embedding Similarity**
 
-A Sentinel-2 median composite (2024, 20 m resolution) is used to compute per-pixel
-spectral similarity against the 53 confirmed reference sites. Areas exceeding the p97
-similarity threshold are retained as Stage 1 candidates, covering approximately 3.7%
-of the Cambodia–Vietnam AOI while capturing all suspected sites and non-reference
-confirmed sites within 500 m.
+Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity.
+Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving near-complete known-site coverage.
 
 $$\text{Similarity} = \frac{\sum_{i} w_i \cdot \cos(\mathbf{e}_i, \mathbf{r}_i)}{\sum_{i} w_i}$$
 
