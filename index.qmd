@@ -282,8 +282,12 @@ high-priority zones by applying distance and night-time light thresholds:
 
 <!-- TODO: 全组补充完整参考文献 -->
 
+- Amerhauser, K. and Goodwin, A. (2026) A world of deceit: Mapping the landscape of the global scam centre phenomenon. Geneva: Global Initiative Against Transnational Organized Crime. Available at: https://globalinitiative.net/wp-content/uploads/2026/03/Kristina-Amerhauser-Alex-Goodwin-A-world-of-deceit-Mapping-the-landscape-of-the-global-scam-centre-phenomenom-GI-TOC-March-2026.pdf (Accessed: 25 April 2026).
+
 - Amnesty International (2023). *Trapped: The Human Suffering behind the Scam Centres*.
   London: Amnesty International.
+
+- Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr. 2026].
 
 - Australian Strategic Policy Institute (2023). *Mapping the Scam Compound Industry
   in Southeast Asia*. Canberra: ASPI.
@@ -293,7 +297,9 @@ high-priority zones by applying distance and night-time light thresholds:
   *Remote Sensing of Environment*, 202, pp.18–27.
   https://doi.org/10.1016/j.rse.2017.06.031
 
-- Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr. 2026].
+- UNODC (2023) Trafficking in Persons for the Purpose of Forced Criminality: Summary Policy Brief. Available at: https://www.unodc.org/roseap/uploads/documents/Publications/2023/TiP_for_FC_Summary_Policy_Brief.pdf (Accessed: 25 April 2026).
+
+- UNODC (2025) Inflection Point: Transnational Organized Crime and the Changing Landscape of Cyber-Enabled Fraud in Southeast Asia. Available at: https://www.unodc.org/roseap/uploads/documents/Publications/2025/Inflection_Point_2025.pdf (Accessed: 25 April 2026).
 
   
 <table style="background-color:#60a5fa; width:100vw; margin-left:calc(-50vw + 50%); margin-top:80px; padding:0 40px; box-sizing:border-box; border:none;">
