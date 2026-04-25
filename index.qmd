@@ -92,12 +92,17 @@ The analysis pipeline operates in two stages:
 
 **Stage 1 — Satellite Embedding Similarity**
 
-Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented 
-by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and 
-each pixel in the AOI is compared to these references using dot-product similarity.
-Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, 
-because it produced a tighter screening layer than p95 while preserving nearly complete known 
-site coverage.
+Stage 1 uses the Google Satellite Embedding V1 annual dataset for 2024. In this dataset, 
+each pixel is represented by a 64-dimensional embedding vector that summarises multi-source 
+satellite information. Within the Cambodia–Vietnam Aoi, 53 confirmed reported sites were 
+available, but only three reproducible confirmed Cambodia reference samples were used for 
+the current embedding run. This small reference set was retained after sensitivity testing 
+because increasing the reference count did not materially improve recovery of known sites, but 
+increased computation.
+
+For each reference sample, the embedding vector was compared with every pixel in the AOI using 
+dot-product similarity. The final similarity surface was calculated as the mean of each reference 
+similarity images:
 
 $$
 s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
@@ -107,6 +112,9 @@ $$
 $$
 S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 $$
+
+Pixels were retained where their mean similarity exceeded the 97th percentile of the sampled 
+similarity distribution:
 
 $$
 \text{Stage 1 candidate}(x)=
@@ -119,8 +127,12 @@ $$
 - x is a pixel within the AOI;
 - e(x) is the 64-dimensional embedding vector of that pixel;
 - rj is the embedding vector of the j-th confirmed reference sample;
-- J is the current number of reference samples;
+- J is the current number of reference samples (J=3 at this condition);
 - S(x) is the final mean similarity image.
+
+Small isolated fragments were removed using a connected pixel filter, and the cleaned raster was 
+vectorised into Stage 1 candidate points. The p97 setting was selected because it was tighter than 
+p95 while retaining high coverage of known confirmed and suspected locations.
 
 **Stage 2 — Indicator-Based Refinement**
 

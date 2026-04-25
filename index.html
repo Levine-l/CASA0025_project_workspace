@@ -249,7 +249,8 @@ Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Ini
 <!-- TODO: 分析组补充方法说明 -->
 <p>The analysis pipeline operates in two stages:</p>
 <p><strong>Stage 1 — Satellite Embedding Similarity</strong></p>
-<p>Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity. Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving nearly complete known site coverage.</p>
+<p>Stage 1 uses the Google Satellite Embedding V1 annual dataset for 2024. In this dataset, each pixel is represented by a 64-dimensional embedding vector that summarises multi-source satellite information. Within the Cambodia–Vietnam Aoi, 53 confirmed reported sites were available, but only three reproducible confirmed Cambodia reference samples were used for the current embedding run. This small reference set was retained after sensitivity testing because increasing the reference count did not materially improve recovery of known sites, but increased computation.</p>
+<p>For each reference sample, the embedding vector was compared with every pixel in the AOI using dot-product similarity. The final similarity surface was calculated as the mean of each reference similarity images:</p>
 <p><span class="math display">\[
 s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
       =\sum_{k=0}^{63} e_k(x)r_{j,k}
@@ -257,6 +258,7 @@ s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
 <p><span class="math display">\[
 S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 \]</span></p>
+<p>Pixels were retained where their mean similarity exceeded the 97th percentile of the sampled similarity distribution:</p>
 <p><span class="math display">\[
 \text{Stage 1 candidate}(x)=
 \begin{cases}
@@ -268,9 +270,10 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <li>x is a pixel within the AOI;</li>
 <li>e(x) is the 64-dimensional embedding vector of that pixel;</li>
 <li>rj is the embedding vector of the j-th confirmed reference sample;</li>
-<li>J is the current number of reference samples;</li>
+<li>J is the current number of reference samples (J=3 at this condition);</li>
 <li>S(x) is the final mean similarity image.</li>
 </ul>
+<p>Small isolated fragments were removed using a connected pixel filter, and the cleaned raster was vectorised into Stage 1 candidate points. The p97 setting was selected because it was tighter than p95 while retaining high coverage of known confirmed and suspected locations.</p>
 <p><strong>Stage 2 — Indicator-Based Refinement</strong></p>
 <p>Candidate zones are scored against a metrics stack:</p>
 <table class="caption-top table">
@@ -295,7 +298,7 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 </tr>
 <tr class="odd">
 <td>dNTL 2021–2024</td>
-<td>Night-time light radiance change. <span class="math inline">\(\Delta NTL = NTL_{2024}-NTL_{2021}\)</span> .</td>
+<td>Night-time light radiance change. <span class="math inline">\(\Delta NTL = NTL_{2024}-NTL_{2021}\)</span>.</td>
 </tr>
 <tr class="even">
 <td>dist_to_confirmed_m</td>
