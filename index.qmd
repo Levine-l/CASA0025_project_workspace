@@ -77,7 +77,28 @@ The analysis pipeline operates in two stages:
 Stage 1 uses Google Satellite Embedding V1 annual imagery for 2024. Each pixel is represented by a 64-dimensional embedding vector. Reference vectors are sampled from confirmed sites, and each pixel in the AOI is compared to these references using dot-product similarity.
 Areas exceeding the 97 percentile similarity threshold are retained as Stage 1 candidates, because it produced a tighter screening layer than p95 while preserving near-complete known-site coverage.
 
-$$\text{Similarity} = \frac{\sum_{i} w_i \cdot \cos(\mathbf{e}_i, \mathbf{r}_i)}{\sum_{i} w_i}$$
+$$
+s_j(x)=\mathbf{e}(x)\cdot\mathbf{r}_j
+      =\sum_{k=0}^{63} e_k(x)r_{j,k}
+$$
+
+$$
+S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
+$$
+
+$$
+\text{Stage 1 candidate}(x)=
+\begin{cases}
+1, & S(x)\geq P_{97}(S) \\
+0, & S(x)<P_{97}(S)
+\end{cases}
+$$
+
+- x is a pixel within the AOI;
+- e(x) is the 64-dimensional embedding vector of that pixel;
+- rj is the embedding vector of the j-th confirmed reference sample;
+- J is the current number of reference samples;
+- S(x) is the final mean similarity image.
 
 **Stage 2 — Indicator-Based Refinement**
 
@@ -85,9 +106,9 @@ Candidate zones are scored against a metrics stack:
 
 | Indicator | Description |
 |-----------|-------------|
-| dNDBI 2021–2024 | Built-up area growth: $\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}$ |
-| dNTL 2021–2024 | Night-time light radiance growth |
-| dNDVI 2021–2024 | Vegetation loss |
+| dNDBI 2021–2024 | Built-up area growth: $\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}$; $\Delta NDVI = NDVI_{2024}-NDVI_{2021}$ |
+| dNDVI 2021–2024 | Vegetation loss：$\test{NDVI}=\frac{NIR-Red}{NIR+Red}$; $\Delta NDBI = NDBI_{2024}-NDBI_{2021}$ |
+| dNTL 2021–2024 | Night-time light radiance growth: $\Delta NTL = NTL_{2024}-NTL_{2021}$ |
 | dist_to_confirmed_m | Proximity to known confirmed sites |
 | dist_to_border_m | Proximity to national borders |
 
@@ -134,7 +155,13 @@ suspected site markers.*
 The application is built entirely in Google Earth Engine and operates through a
 two-stage screening pipeline. Below are key code examples illustrating the core logic.
 
-**Stage 1: Computing NDBI Change**
+**Stage 1: Embedding Similarity**
+```js
+
+```
+
+
+**Stage 2: Computing NDBI Change**
 
 ```js
 // Compute NDBI for 2021 and 2024 Sentinel-2 composites
@@ -152,7 +179,7 @@ var ndbi2024 = s2_2024.normalizedDifference(['B11', 'B8']).rename('NDBI');
 var dNDBI = ndbi2024.subtract(ndbi2021).rename('dNDBI');
 ```
 
-**Stage 2: Candidate Tier Classification**
+**Stage 3: Candidate Tier Classification**
 
 ```js
 // Candidates are scored and classified into tiers
