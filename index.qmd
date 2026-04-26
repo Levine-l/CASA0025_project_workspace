@@ -363,14 +363,14 @@ The Stage 2 pipeline retains 24,464 refined candidate zones and assigns them to 
 priority tiers. A much smaller operational shortlist of 15 candidates is used for default 
 display, but these are not confirmed sites.
 
-| Tier | Count | Criteria |
-|------|-------|----------|
-| High | 8,425 | Both development and activity flags triggered |
-| Medium | 13,059 | One flag triggered |
-| Low | 2,980 | Neither flag |
-| **Operational shortlist** | **15** | **Strictest distance and NTL conditions** |
+| Output group | Count | Meaning |
+|-------------|------:|---------|
+| Stage 1 candidate points | 24,464 | Broad embedding-based screening output |
+| Stage 2 high tier | 8,425 | Triggered both development and activity flags |
+| Stage 2 medium tier | 13,059 | One of the two flags triggered |
+| Stage 2 low tier | 2,980 | Neither flag triggered, retained for uncertainty |
+| Operational shortlist | 15 | Narrow default display subset using stricter distance and night time light conditions |
 
-![Stage 2 Refinement Pipeline](images/methodology_diagram.png)
 
 ---
 
