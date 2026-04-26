@@ -23,7 +23,7 @@ format:
 This project develops a Google Earth Engine (GEE)–based application for exploring candidate
 locations which spatially similar to documented scam compound sites, and explore spatial
 patterns of suspected scam compounds in Southeast Asia, specifically within Cambodia. This
-model, referencing data from Amnesty International(2025) and ASPI, extracts remote-sensing 
+model, referencing data from Amnesty International(2025) and Australian Strategic Policy Institute (ASPI) (2025), extracts remote-sensing 
 indicators associated with compound-like development patterns to identify high-risk areas. 
 The Cambodia–Vietnam analysis contains 53 confirmed reported sites, 45 suspected reported 
 sites, and 22 control points within the AOI. Confirmed sites were used to build a reproducible 
