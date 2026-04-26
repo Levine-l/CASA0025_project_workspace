@@ -73,6 +73,8 @@ labour, human trafficking, and torture.
 | Reference Sites | Confirmed Scam Locations | 53 confirmed sites from Amnesty International and ASPI | [Amnesty International](https://www.amnesty.org) |
 | Reference Sites | Suspected and Control Points | 45 suspected sites and 22 control points for validation | [ASPI](https://www.aspi.org.au) |
 
+Based on precise location data from Amnesty International (2025) and ASPI (2025), our final compiled dataset includes confirmed points, suspected points, and control points on GitHub: [scam_points_update.csv](https://github.com/Levine-l/CASA0025_project_workspace/blob/main/data_processed/scam_points_update.csv){target="_blank"}
+
 ---
 
 ### Methodology
