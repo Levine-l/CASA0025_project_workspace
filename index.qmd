@@ -301,13 +301,46 @@ function buildS2MetricsImage(yearA, yearB, aoi) {
 **Stage 2.2: Candidate Tier Classification**
 
 ```js
-// Candidates are scored and classified into tiers
-// High: both development_flag and activity_flag triggered
-// Medium: one flag triggered  
-// Low: neither flag, retained as lower-confidence candidates
-var highCandidates   = candidates.filter(ee.Filter.eq('priority_tier', 'high'));
-var mediumCandidates = candidates.filter(ee.Filter.eq('priority_tier', 'medium'));
-var lowCandidates    = candidates.filter(ee.Filter.eq('priority_tier', 'low'));
+var finalSummary = candidateMetrics.map(function(f) {
+  var dNdbi = ee.Number(f.get('dNDBI_2021_2024'));
+  var dNdvi = ee.Number(f.get('dNDVI_2021_2024'));
+  var dNtl = ee.Number(f.get('dNTL_2021_2024'));
+  var ntl2024 = ee.Number(f.get('NTL_2024'));
+  var distConfirmed = ee.Number(f.get('dist_to_confirmed_m'));
+  var distBorder = ee.Number(f.get('dist_to_border_m'));
+
+  var developmentFlag = dNdbi.gt(0).and(dNdvi.lt(0));
+  var activityFlag = dNtl.gt(0);
+  var nearBorderFlag = distBorder.lt(10000);
+
+  var highPriority = developmentFlag.and(activityFlag);
+  var mediumPriority = developmentFlag.or(activityFlag);
+
+  var operationalHighFlag = highPriority
+    .and(distConfirmed.lt(5000))
+    .and(ntl2024.gt(5))
+    .and(dNtl.gt(0));
+
+  var tier = ee.String(ee.Algorithms.If(
+    highPriority, 'high',
+    ee.Algorithms.If(mediumPriority, 'medium', 'low')
+  ));
+
+  var operationalTier = ee.String(ee.Algorithms.If(
+    operationalHighFlag,
+    'operational_high',
+    tier
+  ));
+
+  return f.set({
+    development_flag: developmentFlag,
+    activity_flag: activityFlag,
+    near_border_flag: nearBorderFlag,
+    priority_tier: tier,
+    operational_high_flag: operationalHighFlag,
+    operational_priority_tier: operationalTier
+  });
+});
 ```
 
 **Candidate Density Visualisation**
@@ -326,8 +359,9 @@ var densityImage = painted
   .selfMask();
 ```
 
-The Stage 2 pipeline reduces 24,464 Stage 1 candidates to a shortlist of 15
-high-priority zones by applying distance and night-time light thresholds:
+The Stage 2 pipeline retains 24,464 refined candidate zones and assigns them to analytical 
+priority tiers. A much smaller operational shortlist of 15 candidates is used for default 
+display, but these are not confirmed sites.
 
 | Tier | Count | Criteria |
 |------|-------|----------|
