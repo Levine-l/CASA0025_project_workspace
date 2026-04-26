@@ -49,3 +49,56 @@ h2, h3 {
 .custom-footer a {
   color: #eff6ff !important;
 }
+
+pre.sourceCode {
+  max-height: 420px;
+  overflow: auto !important;
+  white-space: pre;
+}
+
+div.sourceCode,
+.code-copy-outer-scaffold {
+  max-width: 100%;
+  overflow: auto;
+}
+
+#TOC ul.collapse {
+  display: block;
+  height: auto !important;
+  visibility: visible;
+}
+
+#TOC ul ul {
+  padding-left: 0.9rem;
+}
+
+#TOC .nav-link {
+  line-height: 1.25;
+}
+
+/* Lightweight syntax colours for manually inserted JavaScript snippets. */
+.sourceCode .js-keyword {
+  color: #3451b2;
+  font-weight: 600;
+}
+
+.sourceCode .js-string {
+  color: #0f7a45;
+}
+
+.sourceCode .js-number {
+  color: #c1121f;
+}
+
+.sourceCode .js-comment {
+  color: #6b7280;
+}
+
+.sourceCode .js-method {
+  color: #4f46e5;
+}
+
+.sourceCode .js-constant {
+  color: #005f73;
+  font-weight: 600;
+}

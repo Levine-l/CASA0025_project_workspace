@@ -146,7 +146,19 @@ window.Quarto = {
   <li><a href="#interface" id="toc-interface" class="nav-link" data-scroll-target="#interface">Interface</a></li>
   </ul></li>
   <li><a href="#the-application" id="toc-the-application" class="nav-link" data-scroll-target="#the-application">The Application</a></li>
-  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How it Works</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How it Works</a>
+  <ul class="collapse show">
+  <li><a href="#insights-and-objectives" id="toc-insights-and-objectives" class="nav-link" data-scroll-target="#insights-and-objectives">1. Insights and Objectives</a></li>
+  <li><a href="#data-preparation-and-precomputations" id="toc-data-preparation-and-precomputations" class="nav-link" data-scroll-target="#data-preparation-and-precomputations">2. Data Preparation and Precomputations</a></li>
+  <li><a href="#interactive-visualization-and-analysis" id="toc-interactive-visualization-and-analysis" class="nav-link" data-scroll-target="#interactive-visualization-and-analysis">3. Interactive Visualization and Analysis</a>
+  <ul class="collapse show">
+  <li><a href="#study-region-overview" id="toc-study-region-overview" class="nav-link" data-scroll-target="#study-region-overview">Study Region Overview</a></li>
+  <li><a href="#border-corridor-focus" id="toc-border-corridor-focus" class="nav-link" data-scroll-target="#border-corridor-focus">Border Corridor Focus</a></li>
+  <li><a href="#candidate-tier-and-reported-site-analysis" id="toc-candidate-tier-and-reported-site-analysis" class="nav-link" data-scroll-target="#candidate-tier-and-reported-site-analysis">Candidate Tier and Reported Site Analysis</a></li>
+  <li><a href="#temporal-change-and-methodology-review" id="toc-temporal-change-and-methodology-review" class="nav-link" data-scroll-target="#temporal-change-and-methodology-review">Temporal Change and Methodology Review</a></li>
+  </ul></li>
+  <li><a href="#limitations-and-potential-expansion" id="toc-limitations-and-potential-expansion" class="nav-link" data-scroll-target="#limitations-and-potential-expansion">4. Limitations and Potential Expansion</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -294,44 +306,49 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 </section>
 <section id="interface" class="level3">
 <h3 class="anchored" data-anchor-id="interface">Interface</h3>
-<!-- TODO: 截图完成后替换占位说明和图片路径 -->
-<p>The application provides a split-panel layout with an interactive map on the right and an analysis dashboard on the left. Key interface components include:</p>
+<p>The interface is designed as a screening dashboard rather than a static map. The main view uses the Cambodia Border Corridor because it shows the core workflow most clearly: candidate tiers, reported site markers, boundary context and the AOI summary panel. The second view shows the Year Compare mode, where users can drag the divider to compare built-up growth (dNDBI) and night light growth (dNTL) across the same area.</p>
 <div class="columns" data-layout-align="center">
-<div class="column" style="width:46%;">
+<div class="column" style="width:48%;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/screenshot_map.png" class="img-fluid figure-img"></p>
-<figcaption>Main Map View</figcaption>
+<p><img src="image/interface_cambodia_border.png" class="img-fluid figure-img"></p>
+<figcaption>Cambodia Border Corridor interface</figcaption>
 </figure>
 </div>
-<p><em>Candidate density heatmap over the Cambodia–Vietnam AOI with confirmed and suspected site markers.</em></p>
-</div><div class="column" style="width:2%;">
+<p><em>Cambodia Border Corridor view</em></p>
+</div><div class="column" style="width:4%;">
 
-</div><div class="column" style="width:46%;">
+</div><div class="column" style="width:48%;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/screenshot_dashboard.png" class="img-fluid figure-img"></p>
-<figcaption>AOI Dashboard</figcaption>
+<p><img src="image/interface_year_compare.png" class="img-fluid figure-img"></p>
+<figcaption>Year Compare interface</figcaption>
 </figure>
 </div>
-<p><em>AOI Dashboard showing candidate tier distribution.</em></p>
+<p><em>Year Compare view</em></p>
 </div>
 </div>
+<p>The left control panel lets users switch regional focus, toggle Year Compare, reset the map and review AOI-level counts. The map layers combine candidate zones by tier, confirmed, suspected and control sites, province boundaries and highlighted shared borders.</p>
 <hr>
 </section>
 </section>
 <section id="the-application" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="the-application">The Application</h2>
-<!-- TODO: 替换为发布后的App链接 -->
+<p>The live Google Earth Engine application is embedded below. If the embedded view loads slowly or is blocked by the browser, open it directly in a new tab: <a href="https://orbital-kit-415514.projects.earthengine.app/view/scam-compound-explorer" target="_blank">Scam Compound Explorer</a>.</p>
 <div class="column-page">
-<iframe src="https://code.earthengine.google.com/YOUR_CODE_LINK_HERE" width="100%" height="700px">
+<iframe src="https://orbital-kit-415514.projects.earthengine.app/view/scam-compound-explorer" width="100%" height="760px" style="border: 1px solid #dbeafe; border-radius: 6px;">
 </iframe>
 </div>
 <hr>
 </section>
 <section id="how-it-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-it-works">How it Works</h2>
-<p>The application is built entirely in Google Earth Engine and operates through a two-stage screening pipeline. Below are key code examples illustrating the core logic.</p>
+<p>The application is built entirely in Google Earth Engine and links the analytical pipeline to an interactive screening interface. The workflow is organised into four parts.</p>
+<h3 id="insights-and-objectives" class="anchored" data-anchor-id="insights-and-objectives">1. Insights and Objectives</h3>
+<p>The tool responds to a practical analytical challenge: reported scam compounds are often clustered near border corridors, special economic zones and rapidly changing peri-urban landscapes, but public evidence remains uneven across countries. Instead of treating the map as a definitive inventory, the application provides a transparent screening layer that helps users compare known reports with satellite-derived signals of recent construction and night-time activity.</p>
+<p>The main objective is to prioritise locations for further investigation. The app combines embedding similarity, Sentinel-2 built-up change, VIIRS night light change and proximity context, then presents the results as high, medium and low candidate tiers. Confirmed, suspected and control sites are retained in the interface so users can assess where the model aligns with existing evidence and where it may be over- or under-selecting.</p>
+<h3 id="data-preparation-and-precomputations" class="anchored" data-anchor-id="data-preparation-and-precomputations">2. Data Preparation and Precomputations</h3>
+<p>Before the app is loaded, the main candidate surfaces and diagnostic metrics are prepared in Google Earth Engine. Precomputing these outputs keeps the interface responsive and avoids running expensive overlap checks every time users change views. Below are key code examples illustrating the core logic.</p>
 <p><strong>Stage 1: Embedding Similarity</strong></p>
 <p>The first code cell loads the 2024 Google Satellite Embedding image for the Cambodia–Vietnam AOI and samples embedding vectors at the selected confirmed reference sites. Each sampled reference vector is converted back into a constant image so that it can be compared pixel by pixel with the full embedding image. The dot product across embedding bands produces one similarity image per reference sample, and these images are averaged to create the final Stage 1 similarity surface.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> embeddings <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL'</span>)<span class="op">;</span></span>
@@ -447,7 +464,95 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The operational shortlist is narrower than the analytical high tier. It requires higher priority status, proximity to a confirmed reported site, a minimum 2024 night time light value, and positive night time light growth.</p>
+<h3 id="interactive-visualization-and-analysis" class="anchored" data-anchor-id="interactive-visualization-and-analysis">3. Interactive Visualization and Analysis</h3>
+<p>The interactive app renders the precomputed outputs as map layers, charts and linked controls. Because the study area is transnational, the interface is organised by regional scale and evidence type rather than by national or district administrative units.</p>
+<h4 id="study-region-overview" class="anchored" data-anchor-id="study-region-overview">Study Region Overview</h4>
+<p>The Southeast Asia overview provides a broad spatial context for the five study countries: Cambodia, Thailand, Vietnam, Lao PDR and Myanmar. This view is used to frame the project as a cross-border problem and to show how reported scam-related locations are distributed across multiple jurisdictions rather than within one national system.</p>
+<p><strong>Regional AOI setup</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="js-keyword">var</span> <span class="js-constant">AOIS</span> = {
+  <span class="js-string">'Cambodia Border Corridor'</span>: <span class="js-constant">AOI_CV</span>,
+  <span class="js-string">'Myanmar-Thailand Border'</span>: <span class="js-constant">AOI_MT</span>,
+  <span class="js-string">'Golden Triangle (future extension)'</span>: <span class="js-constant">AOI_GT</span>,
+  <span class="js-string">'Southeast Asia overview'</span>: <span class="js-constant">AOI_SEA</span>
+};
+
+<span class="js-keyword">var</span> <span class="js-constant">AOI_VIEWS</span> = {
+  <span class="js-string">'Cambodia Border Corridor'</span>: {lon: <span class="js-number">104.5</span>, lat: <span class="js-number">13.0</span>, zoom: <span class="js-number">7</span>},
+  <span class="js-string">'Myanmar-Thailand Border'</span>:  {lon: <span class="js-number">98.8</span>,  lat: <span class="js-number">17.2</span>, zoom: <span class="js-number">6</span>},
+  <span class="js-string">'Golden Triangle (future extension)'</span>: {lon: <span class="js-number">100.2</span>, lat: <span class="js-number">21.0</span>, zoom: <span class="js-number">8</span>},
+  <span class="js-string">'Southeast Asia overview'</span>: {lon: <span class="js-number">102.5</span>, lat: <span class="js-number">15.5</span>, zoom: <span class="js-number">5</span>}
+};
+
+<span class="js-keyword">function</span> setMapToAoiView(targetMap, aoiName) {
+  <span class="js-keyword">var</span> view = <span class="js-constant">AOI_VIEWS</span>[aoiName] || <span class="js-constant">AOI_VIEWS</span>[<span class="js-constant">DEFAULT_AOI</span>];
+  targetMap.<span class="js-method">setCenter</span>(view.<span class="js-method">lon</span>, view.<span class="js-method">lat</span>, view.<span class="js-method">zoom</span>);
+}</code></pre></div>
+<h4 id="border-corridor-focus" class="anchored" data-anchor-id="border-corridor-focus">Border Corridor Focus</h4>
+<p>Users can switch from the regional overview into specific border corridors, including the Cambodia Border Corridor, Myanmar-Thailand and the Golden Triangle future extension. These AOIs make the map easier to interpret by focusing on the corridor scale at which compounds, special economic zones, transport routes and border enforcement issues are most relevant.</p>
+<p><strong>AOI switching and layer refresh</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="js-keyword">function</span> renderAoi(aoiName) {
+  activeRenderId += <span class="js-number">1</span>;
+  <span class="js-keyword">var</span> renderId = activeRenderId;
+  <span class="js-keyword">var</span> aoiData  = getAoiData(aoiName);
+
+  activeAoiName         = aoiName;
+  activeAoi             = aoiData.<span class="js-method">geometry</span>;
+  activePointsInAoi     = aoiData.<span class="js-method">points</span>;
+  activeCandidatesInAoi = aoiData.<span class="js-method">candidates</span>;
+  activeTierCollections = aoiData.<span class="js-method">tiers</span>;
+
+  <span class="js-keyword">var</span> stack = buildLayerStack(aoiName);
+  applyLayerStack(stack);
+  setMapToAoiView(map, aoiName);
+
+  updateLayerControls(stack);
+  updateKpis(aoiData.<span class="js-method">points</span>, aoiData.<span class="js-method">candidates</span>, renderId, aoiName);
+  setEvidencePlaceholder(aoiName);
+  setDefaultInfo();
+  buildDashboard(aoiName);
+}</code></pre></div>
+<h4 id="candidate-tier-and-reported-site-analysis" class="anchored" data-anchor-id="candidate-tier-and-reported-site-analysis">Candidate Tier and Reported Site Analysis</h4>
+<p>The main analytical view compares high, medium and low candidate tiers with confirmed, suspected and control sites. The left dashboard summarises reported sites, reference sites, control locations and candidate counts for the selected AOI, while the map shows whether candidate clusters coincide with known reports or appear in areas with limited existing documentation.</p>
+<p>Candidate density is included in this part of the workflow because it translates many individual candidate geometries into a readable spatial concentration layer. This helps users identify clusters and compare them with reported site markers without treating every candidate pixel as an isolated finding.</p>
+<p><strong>Candidate tier map layer</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="js-keyword">var</span> <span class="js-constant">CANDIDATE_TIER_PALETTE</span> = [<span class="js-constant">COLORS</span>.<span class="js-method">low</span>, <span class="js-constant">COLORS</span>.<span class="js-method">medium</span>, <span class="js-constant">COLORS</span>.<span class="js-method">high</span>];
+<span class="js-keyword">var</span> <span class="js-constant">CANDIDATE_PIXEL_RADIUS_M</span> = <span class="js-number">750</span>;
+
+<span class="js-keyword">function</span> makeCandidateTierImage(tiers, aoi) {
+  <span class="js-keyword">var</span> <span class="js-constant">PAINT_SCALE</span> = <span class="js-number">1000</span>;
+  <span class="js-keyword">var</span> low = ee.<span class="js-method">Image</span>().<span class="js-method">byte</span>()
+    .<span class="js-method">paint</span>(tiers.<span class="js-method">low</span>, <span class="js-number">1</span>)
+    .<span class="js-method">setDefaultProjection</span>(<span class="js-string">'EPSG:3857'</span>, <span class="js-keyword">null</span>, <span class="js-constant">PAINT_SCALE</span>)
+    .<span class="js-method">focal_max</span>(<span class="js-constant">CANDIDATE_PIXEL_RADIUS_M</span>, <span class="js-string">'square'</span>, <span class="js-string">'meters'</span>);
+  <span class="js-keyword">var</span> medium = ee.<span class="js-method">Image</span>().<span class="js-method">byte</span>()
+    .<span class="js-method">paint</span>(tiers.<span class="js-method">medium</span>, <span class="js-number">2</span>)
+    .<span class="js-method">setDefaultProjection</span>(<span class="js-string">'EPSG:3857'</span>, <span class="js-keyword">null</span>, <span class="js-constant">PAINT_SCALE</span>)
+    .<span class="js-method">focal_max</span>(<span class="js-constant">CANDIDATE_PIXEL_RADIUS_M</span>, <span class="js-string">'square'</span>, <span class="js-string">'meters'</span>);
+  <span class="js-keyword">var</span> high = ee.<span class="js-method">Image</span>().<span class="js-method">byte</span>()
+    .<span class="js-method">paint</span>(tiers.<span class="js-method">high</span>, <span class="js-number">3</span>)
+    .<span class="js-method">setDefaultProjection</span>(<span class="js-string">'EPSG:3857'</span>, <span class="js-keyword">null</span>, <span class="js-constant">PAINT_SCALE</span>)
+    .<span class="js-method">focal_max</span>(<span class="js-constant">CANDIDATE_PIXEL_RADIUS_M</span>, <span class="js-string">'square'</span>, <span class="js-string">'meters'</span>);
+
+  <span class="js-keyword">return</span> low.<span class="js-method">blend</span>(medium).<span class="js-method">blend</span>(high)
+    .<span class="js-method">reproject</span>({crs: <span class="js-string">'EPSG:3857'</span>, scale: <span class="js-constant">PAINT_SCALE</span>})
+    .<span class="js-method">clip</span>(aoi)
+    .<span class="js-method">selfMask</span>();
+}
+
+<span class="js-keyword">if</span> (!candidateTierCache[candidateTierKey]) {
+  candidateTierCache[candidateTierKey] = makeCandidateTierImage(aoiData.<span class="js-method">tiers</span>, <span class="js-constant">STUDY_GEOM</span>);
+}
+
+<span class="js-keyword">var</span> stack = {
+  candidateTiers: ui.<span class="js-method">Map</span>.<span class="js-method">Layer</span>(candidateTierCache[candidateTierKey], {
+    min: <span class="js-number">1</span>,
+    max: <span class="js-number">3</span>,
+    palette: <span class="js-constant">CANDIDATE_TIER_PALETTE</span>,
+    opacity: <span class="js-number">0.85</span>
+  }, <span class="js-string">'Candidate Zones by Tier'</span>, <span class="js-keyword">true</span>)
+};</code></pre></div>
 <p><strong>Candidate Density Visualisation</strong></p>
+<p>This density example belongs to the precomputation workflow rather than the live app file. The live app displays the resulting candidate tiers as a cached map layer, while the precomputation step below shows how candidate geometries can be converted into a smoothed concentration surface for exploratory analysis.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Paint candidate polygons at 1 km scale and apply smoothing kernel</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> painted <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>()<span class="op">.</span><span class="fu">byte</span>()<span class="op">.</span><span class="fu">paint</span>(candidates<span class="op">,</span> <span class="dv">1</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">setDefaultProjection</span>(<span class="st">'EPSG:3857'</span><span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">1000</span>)<span class="op">;</span></span>
@@ -501,6 +606,138 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 </tr>
 </tbody>
 </table>
+<h4 id="temporal-change-and-methodology-review" class="anchored" data-anchor-id="temporal-change-and-methodology-review">Temporal Change and Methodology Review</h4>
+<p>The Year Compare mode supports temporal interpretation by showing built-up growth (dNDBI) and night light growth (dNTL) in a draggable split view. The methodology and validation panels provide additional transparency by summarising the screening stages, overlap checks and evidence scatter plots, so users can review both the mapped outputs and the assumptions behind them.</p>
+<p><strong>Year Compare change layers</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="js-keyword">function</span> buildSplitCompareImages(cacheKey, compareGeometry) {
+  <span class="js-keyword">if</span> (splitCompareCache[cacheKey]) {
+    <span class="js-keyword">return</span> splitCompareCache[cacheKey];
+  }
+
+  <span class="js-keyword">var</span> s2_2021 = ee.<span class="js-method">ImageCollection</span>(<span class="js-string">'COPERNICUS/S2_SR_HARMONIZED'</span>)
+    .<span class="js-method">filterBounds</span>(compareGeometry)
+    .<span class="js-method">filterDate</span>(<span class="js-string">'2021-01-01'</span>, <span class="js-string">'2021-12-31'</span>)
+    .<span class="js-method">filter</span>(ee.<span class="js-method">Filter</span>.<span class="js-method">lt</span>(<span class="js-string">'CLOUDY_PIXEL_PERCENTAGE'</span>, <span class="js-number">30</span>))
+    .<span class="js-method">select</span>([<span class="js-string">'B11'</span>, <span class="js-string">'B8'</span>])
+    .<span class="js-method">median</span>();
+
+  <span class="js-keyword">var</span> s2_2024 = ee.<span class="js-method">ImageCollection</span>(<span class="js-string">'COPERNICUS/S2_SR_HARMONIZED'</span>)
+    .<span class="js-method">filterBounds</span>(compareGeometry)
+    .<span class="js-method">filterDate</span>(<span class="js-string">'2024-01-01'</span>, <span class="js-string">'2024-12-31'</span>)
+    .<span class="js-method">filter</span>(ee.<span class="js-method">Filter</span>.<span class="js-method">lt</span>(<span class="js-string">'CLOUDY_PIXEL_PERCENTAGE'</span>, <span class="js-number">30</span>))
+    .<span class="js-method">select</span>([<span class="js-string">'B11'</span>, <span class="js-string">'B8'</span>])
+    .<span class="js-method">median</span>();
+
+  <span class="js-keyword">var</span> ndbi2021 = s2_2021.<span class="js-method">normalizedDifference</span>([<span class="js-string">'B11'</span>, <span class="js-string">'B8'</span>]).<span class="js-method">rename</span>(<span class="js-string">'NDBI'</span>);
+  <span class="js-keyword">var</span> ndbi2024 = s2_2024.<span class="js-method">normalizedDifference</span>([<span class="js-string">'B11'</span>, <span class="js-string">'B8'</span>]).<span class="js-method">rename</span>(<span class="js-string">'NDBI'</span>);
+  <span class="js-keyword">var</span> dNDBI = ndbi2024.<span class="js-method">subtract</span>(ndbi2021).<span class="js-method">rename</span>(<span class="js-string">'dNDBI'</span>)
+    .<span class="js-method">clip</span>(compareGeometry);
+  <span class="js-keyword">var</span> dNDBIGrowth = dNDBI.<span class="js-method">updateMask</span>(dNDBI.<span class="js-method">gt</span>(<span class="js-number">0.015</span>));
+
+  <span class="js-keyword">var</span> ntl2021 = ee.<span class="js-method">ImageCollection</span>(<span class="js-string">'NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG'</span>)
+    .<span class="js-method">filterBounds</span>(compareGeometry)
+    .<span class="js-method">filterDate</span>(<span class="js-string">'2021-01-01'</span>, <span class="js-string">'2021-12-31'</span>)
+    .<span class="js-method">select</span>(<span class="js-string">'avg_rad'</span>)
+    .<span class="js-method">median</span>();
+
+  <span class="js-keyword">var</span> ntl2024 = ee.<span class="js-method">ImageCollection</span>(<span class="js-string">'NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG'</span>)
+    .<span class="js-method">filterBounds</span>(compareGeometry)
+    .<span class="js-method">filterDate</span>(<span class="js-string">'2024-01-01'</span>, <span class="js-string">'2024-12-31'</span>)
+    .<span class="js-method">select</span>(<span class="js-string">'avg_rad'</span>)
+    .<span class="js-method">median</span>();
+
+  <span class="js-keyword">var</span> dNTL = ntl2024.<span class="js-method">subtract</span>(ntl2021).<span class="js-method">rename</span>(<span class="js-string">'dNTL'</span>)
+    .<span class="js-method">clip</span>(compareGeometry);
+  <span class="js-keyword">var</span> dNTLGrowth = dNTL.<span class="js-method">updateMask</span>(dNTL.<span class="js-method">gt</span>(<span class="js-number">0.25</span>));
+
+  splitCompareCache[cacheKey] = {
+    dNDBIGrowth: dNDBIGrowth,
+    dNTLGrowth:  dNTLGrowth
+  };
+  <span class="js-keyword">return</span> splitCompareCache[cacheKey];
+}</code></pre></div>
+<h3 id="limitations-and-potential-expansion" class="anchored" data-anchor-id="limitations-and-potential-expansion">4. Limitations and Potential Expansion</h3>
+<p>The outputs should be interpreted as prioritisation evidence, not confirmed scam compound locations. The workflow depends on public reports, known reference sites, cloud-filtered Sentinel-2 composites and VIIRS night light signals, so both false positives and false negatives are expected. Dense urban growth, industrial sites, border trade zones and other large facilities can produce similar satellite signatures.</p>
+<p>Future expansion could add more verified reference sites, integrate higher-resolution commercial imagery where available, include additional years for temporal monitoring and extend the same interface logic to the Golden Triangle and other Southeast Asian border corridors. The current design keeps these extensions possible by separating precomputed candidate layers from the interactive map controls.</p>
+<script>
+function applyManualJsHighlight() {
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function colourJs(code) {
+    var keywords = {
+      'var': true, 'function': true, 'return': true, 'if': true,
+      'null': true, 'true': true, 'false': true
+    };
+    var output = '';
+    var i = 0;
+
+    while (i < code.length) {
+      var rest = code.slice(i);
+      var comment = rest.match(/^\/\/[^\n]*/);
+      if (comment) {
+        output += '<span class="js-comment">' + escapeHtml(comment[0]) + '</span>';
+        i += comment[0].length;
+        continue;
+      }
+
+      var stringMatch = rest.match(/^'(?:\\.|[^'\\])*'|^"(?:\\.|[^"\\])*"/);
+      if (stringMatch) {
+        output += '<span class="js-string">' + escapeHtml(stringMatch[0]) + '</span>';
+        i += stringMatch[0].length;
+        continue;
+      }
+
+      var method = rest.match(/^\.([A-Za-z_$][\w$]*)/);
+      if (method) {
+        output += '.<span class="js-method">' + escapeHtml(method[1]) + '</span>';
+        i += method[0].length;
+        continue;
+      }
+
+      var number = rest.match(/^\b\d+(?:\.\d+)?\b/);
+      if (number) {
+        output += '<span class="js-number">' + escapeHtml(number[0]) + '</span>';
+        i += number[0].length;
+        continue;
+      }
+
+      var word = rest.match(/^[A-Za-z_$][\w$]*/);
+      if (word) {
+        var token = word[0];
+        if (keywords[token]) {
+          output += '<span class="js-keyword">' + escapeHtml(token) + '</span>';
+        } else if (/^[A-Z0-9_]{3,}$/.test(token)) {
+          output += '<span class="js-constant">' + escapeHtml(token) + '</span>';
+        } else {
+          output += escapeHtml(token);
+        }
+        i += token.length;
+        continue;
+      }
+
+      output += escapeHtml(code[i]);
+      i += 1;
+    }
+    return output;
+  }
+
+  document.querySelectorAll('pre.sourceCode.js code.sourceCode.javascript').forEach(function(codeBlock) {
+    if (codeBlock.querySelector('span')) { return; }
+    codeBlock.innerHTML = colourJs(codeBlock.textContent);
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyManualJsHighlight);
+} else {
+  applyManualJsHighlight();
+}
+</script>
 <hr>
 </section>
 <section id="references" class="level2">
