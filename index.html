@@ -171,16 +171,15 @@ Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Ini
 <hr>
 <section id="problem-statement" class="level3">
 <h3 class="anchored" data-anchor-id="problem-statement">Problem Statement</h3>
-<p>Transnational organized crime and the rapid expansion of cyber scams across Southeast Asia have emerged as a significant humanitarian and security crisis (UNODC, 2025). Despite their scale, these compounds remain difficult to systematically detect due to their strategic placement in border regions and their deliberate spatial overlap with legitimate commercial environments (ASPI, 2025). Traditional monitoring is often hindered by fragmented reporting and a critical shortage of verified ground-truth data (Global Initiative, 2026). Our application addresses this gap by providing a reproducible, satellite-based screening tool that bridges the divide between remote sensing technology and policy-oriented investigation. By grounding our analysis in documented reference cases, this platform offers an intuitive interface for researchers and policymakers to visualize high-risk expansion zones，helps overcome long-standing barriers in cross-border data sharing and regional security planning.</p>
+<p>Transnational organized crime and the rapid expansion of cyber scams across Southeast Asia have emerged as a significant humanitarian and security crisis (UNODC, 2025). Despite their scale, these compounds remain difficult to systematically detect due to their strategic placement in border regions and their deliberate spatial overlap with legitimate commercial environments (ASPI, 2025). Traditional monitoring is often hindered by fragmented reporting and a critical shortage of verified ground-truth data (Global Initiative, 2026). Our application addresses this gap by providing a reproducible, satellite-based screening tool that bridges the divide between remote sensing technology and policy-oriented investigation. By grounding our analysis in documented reference cases, this platform offers an intuitive interface for researchers and policymakers to visualize high-risk expansion zones, helps overcome long-standing barriers in cross-border data sharing and regional security planning.</p>
 </section>
 <section id="end-user" class="level3">
 <h3 class="anchored" data-anchor-id="end-user">End User</h3>
-<p>Our platform is designed for human rights monitoring agencies, investigative journalists, and policy-oriented researchers working to combat transnational crime in Southeast Asia. Limited public information and complex on-the-ground situations have long hampered the effectiveness of international interventions. Our interactive maps significantly enhance data accessibility and applicability, fostering collaboration among global stakeholders and providing robust spatial evidence to support international initiatives against forced labour, human trafficking, and torture.</p>
+<p>Our platform is designed for human rights monitoring agencies, investigative journalists, and policy-oriented researchers working to combat transnational crime in Southeast Asia. Limited public information and complex on-the-ground situations have long hampered the effectiveness of international interventions. Our interactive map is designed to improves access to spatial screening outputs, and provides a structured evidence base for further investigation into forced labour, human trafficking, and related forms of abuse.</p>
 <hr>
 </section>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<!-- TODO: 数据组补充完整数据说明 -->
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -207,7 +206,7 @@ Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Ini
 <td>Night-time Lights</td>
 <td>VIIRS DNB Monthly V1 VCMCFG</td>
 <td>Night-time radiance for activity growth detection (dNTL 2021–2024)</td>
-<td><a href="https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG">GEE Catalog</a></td>
+<td><a href="https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMCFG">GEE Catalog</a></td>
 </tr>
 <tr class="even">
 <td>Boundaries</td>
@@ -240,7 +239,6 @@ Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Ini
 </section>
 <section id="methodology" class="level3">
 <h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
-<!-- TODO: 分析组补充方法说明 -->
 <p>The analysis pipeline operates in two stages:</p>
 <p><strong>Stage 1 — Satellite Embedding Similarity</strong></p>
 <p>Stage 1 uses the Google Satellite Embedding V1 annual dataset for 2024. In this dataset, each pixel is represented by a 64-dimensional embedding vector that summarises multi-source satellite information. Within the Cambodia–Vietnam Aoi, 53 confirmed reported sites were available, but only three reproducible confirmed Cambodia reference samples were used for the current embedding run. This small reference set was retained after sensitivity testing because increasing the reference count did not materially improve recovery of known sites, but increased computation.</p>
@@ -261,11 +259,11 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 \end{cases}
 \]</span></p>
 <ul>
-<li>x is a pixel within the AOI;</li>
-<li>e(x) is the 64-dimensional embedding vector of that pixel;</li>
-<li>rj is the embedding vector of the j-th confirmed reference sample;</li>
-<li>J is the current number of reference samples (J=3 at this condition);</li>
-<li>S(x) is the final mean similarity image.</li>
+<li>(x) is a pixel within the AOI;</li>
+<li>((x)) is the 64-dimensional embedding vector of that pixel;</li>
+<li>(_j) is the embedding vector of the j-th confirmed reference sample;</li>
+<li>J is the current number of reference samples (J=3 in this condition);</li>
+<li>(S(x)) is the final mean similarity image.</li>
 </ul>
 <p>Small isolated fragments were removed using a connected pixel filter, and the cleaned raster was vectorised into Stage 1 candidate points. The p97 setting was selected because it was tighter than p95 while retaining high coverage of known confirmed and suspected locations.</p>
 <p><strong>Stage 2 — Indicator-Based Refinement</strong></p>
@@ -288,9 +286,9 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <p><span class="math display">\[
 \text{activity flag} = \Delta \text{NTL} &gt; 0
 \]</span></p>
-<p>Candidates then assigned to priority tiers. High priority candidates triggered both development and activity flags; medium priority candidates triggered one of the two flags; and low-priority candidates triggered neither flag but retained to preserve uncertainty. Border distance was retained as contextual information rather than used as a hard filtering gate in the final tiering.</p>
+<p>Candidates were then assigned to priority tiers. High priority candidates triggered both development and activity flags; medium priority candidates triggered one of the two flags; and low-priority candidates triggered neither flag but retained to preserve uncertainty. Border distance was retained as contextual information rather than used as a hard filtering gate in the final tiering.</p>
 <p><strong>Validation</strong></p>
-<p>Validation conduct in two parts. First, Stage 1 was evaluated using raster overlap checks against suspected sites, non-reference confirmed sites, held out confirmed samples, and control points. This shows that the 97th percentile embedding layer had very high recall, including a mean held out confirmed recall of 1.0 across repeated splits, but it also capture control points. Therefore, Stage 1 is interpreted as a high recall screening surface rather than a precise classifier.</p>
+<p>Validation conduct in two parts. First, Stage 1 was evaluated using raster overlap checks against suspected sites, non-reference confirmed sites, held out confirmed samples, and control points. This shows that the 97th percentile embedding layer had very high recall, including a mean held out confirmed recall of 1.0 across repeated splits, but it also captured control points. Therefore, Stage 1 is interpreted as a high recall screening surface rather than a precise classifier.</p>
 <p>Second, Stage 2 was evaluated using vector overlap checks for the high, medium, low, and all refined candidate layers. The refined layer reduced control hits from 22/22 under Stage 1 to 7/22 for all refined candidates within 500 m, but recall for known sites also dropped. Therefore, the final output should be read as a prioritisation layer for further investigation, not as a verified list of scam compounds.</p>
 <hr>
 </section>
@@ -335,6 +333,7 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <h2 class="anchored" data-anchor-id="how-it-works">How it Works</h2>
 <p>The application is built entirely in Google Earth Engine and operates through a two-stage screening pipeline. Below are key code examples illustrating the core logic.</p>
 <p><strong>Stage 1: Embedding Similarity</strong></p>
+<p>The first code cell loads the 2024 Google Satellite Embedding image for the Cambodia–Vietnam AOI and samples embedding vectors at the selected confirmed reference sites. Each sampled reference vector is converted back into a constant image so that it can be compared pixel by pixel with the full embedding image. The dot product across embedding bands produces one similarity image per reference sample, and these images are averaged to create the final Stage 1 similarity surface.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> embeddings <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL'</span>)<span class="op">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> embeddingImage <span class="op">=</span> embeddings</span>
@@ -371,7 +370,9 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> meanSimilarity <span class="op">=</span> similarityImages<span class="op">.</span><span class="fu">mean</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Stage 2.1: Computing NDBI Change</strong></p>
+<p>This step produces a broad screening. Pixels above the p97 similarity threshold are treated as candidate areas because they resemble the reference sites in embedding space. The validation results show that this layer has very high recall for known confirmed sites, but it is not sufficiently selective on its own, so the output is passed into stage 2 for contextual refinement.</p>
+<p><strong>Stage 2.1: Computing Sentinel-2 Change Metrics</strong></p>
+<p>Stage 2 converts the broad embedding output into interpretable candidate level evidence. The code below builds annual Sentinel-2 median composites for 2021 and 2024, then computes NDVI and NDBI for both years. The difference bands, <code>dNDVI_2021_2024</code> and <code>dNDBI_2021_2024</code>, are used to describe vegetation loss and built up signal change around each candidate zone.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getS2Composite</span>(year<span class="op">,</span> aoi) {</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> startDate <span class="op">=</span> ee<span class="op">.</span><span class="at">Date</span><span class="op">.</span><span class="fu">fromYMD</span>(year<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> endDate <span class="op">=</span> startDate<span class="op">.</span><span class="fu">advance</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'year'</span>)<span class="op">;</span></span>
@@ -402,7 +403,9 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ndviA<span class="op">.</span><span class="fu">addBands</span>(ndviB)<span class="op">.</span><span class="fu">addBands</span>(ndbiA)<span class="op">.</span><span class="fu">addBands</span>(ndbiB)</span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>              <span class="op">.</span><span class="fu">addBands</span>(dNDVI)<span class="op">.</span><span class="fu">addBands</span>(dNDBI)<span class="op">;</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These metrics are not direct indicators of criminal activity. Decreasing NDVI may indicate vegetation loss or land clearance, while increasing NDBI may suggest stronger built up or impervious surface signal. In the final steps, these bands are reduced over 500 m candidate buffers to produce candidate level mean values.</p>
 <p><strong>Stage 2.2: Candidate Tier Classification</strong></p>
+<p>The tiering step uses the precomputed candidate metrics, a candidate is flagged for development evidence when built up signal increases and vegetation signal decreases. It is flagged for activity evidence when night time light radiance increases. These two flags are then combined to produce high, medium and low analytical priority tiers.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> finalSummary <span class="op">=</span> candidateMetrics<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(f) {</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNdbi <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dNDBI_2021_2024'</span>))<span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNdvi <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dNDVI_2021_2024'</span>))<span class="op">;</span></span>
@@ -443,6 +446,7 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">operational_priority_tier</span><span class="op">:</span> operationalTier</span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The operational shortlist is narrower than the analytical high tier. It requires higher priority status, proximity to a confirmed reported site, a minimum 2024 night time light value, and positive night time light growth.</p>
 <p><strong>Candidate Density Visualisation</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Paint candidate polygons at 1 km scale and apply smoothing kernel</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> painted <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>()<span class="op">.</span><span class="fu">byte</span>()<span class="op">.</span><span class="fu">paint</span>(candidates<span class="op">,</span> <span class="dv">1</span>)</span>

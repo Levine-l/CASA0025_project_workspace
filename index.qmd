@@ -232,6 +232,7 @@ The application is built entirely in Google Earth Engine and operates through a
 two-stage screening pipeline. Below are key code examples illustrating the core logic.
 
 **Stage 1: Embedding Similarity**
+
 The first code cell loads the 2024 Google Satellite Embedding image for the Cambodia–Vietnam AOI 
 and samples embedding vectors at the selected confirmed reference sites. Each sampled reference 
 vector is converted back into a constant image so that it can be compared pixel by pixel with the 
