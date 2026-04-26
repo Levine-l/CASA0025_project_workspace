@@ -390,6 +390,10 @@ display, but these are not confirmed sites.
 - Australian Strategic Policy Institute (2023). *Mapping the Scam Compound Industry
   in Southeast Asia*. Canberra: ASPI.
 
+- Google Earth Engine (n.d.) *Satellite Embedding V1 Annual*. Google Earth Engine Data Catalog. Available at: https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL (Accessed: 25 April 2026).
+
+- Google Earth Engine Community (n.d.) *Satellite Embedding 05: Similarity Search*. Available at: https://developers.google.com/earth-engine/tutorials/community/satellite-embedding-05-similarity-search (Accessed: 25 April 2026).
+
 - Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D. and Moore, R.
   (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone.
   *Remote Sensing of Environment*, 202, pp.18–27.

@@ -235,6 +235,7 @@ Resource From: United Nations Office on Drugs and Crime (2023, 2025), Global Ini
 </tr>
 </tbody>
 </table>
+<p>Based on precise location data from Amnesty International (2025) and ASPI (2025), our final compiled dataset includes confirmed points, suspected points, and control points on GitHub: <a href="https://github.com/Levine-l/CASA0025_project_workspace/blob/main/data_processed/scam_points_update.csv" target="_blank">scam_points_update.csv</a></p>
 <hr>
 </section>
 <section id="methodology" class="level3">
@@ -402,13 +403,46 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>              <span class="op">.</span><span class="fu">addBands</span>(dNDVI)<span class="op">.</span><span class="fu">addBands</span>(dNDBI)<span class="op">;</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Stage 2.2: Candidate Tier Classification</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Candidates are scored and classified into tiers</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// High: both development_flag and activity_flag triggered</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Medium: one flag triggered  </span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Low: neither flag, retained as lower-confidence candidates</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> highCandidates   <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'high'</span>))<span class="op">;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> mediumCandidates <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'medium'</span>))<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> lowCandidates    <span class="op">=</span> candidates<span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'priority_tier'</span><span class="op">,</span> <span class="st">'low'</span>))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> finalSummary <span class="op">=</span> candidateMetrics<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(f) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNdbi <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dNDBI_2021_2024'</span>))<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNdvi <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dNDVI_2021_2024'</span>))<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dNtl <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dNTL_2021_2024'</span>))<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> ntl2024 <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'NTL_2024'</span>))<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> distConfirmed <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dist_to_confirmed_m'</span>))<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> distBorder <span class="op">=</span> ee<span class="op">.</span><span class="fu">Number</span>(f<span class="op">.</span><span class="fu">get</span>(<span class="st">'dist_to_border_m'</span>))<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> developmentFlag <span class="op">=</span> dNdbi<span class="op">.</span><span class="fu">gt</span>(<span class="dv">0</span>)<span class="op">.</span><span class="fu">and</span>(dNdvi<span class="op">.</span><span class="fu">lt</span>(<span class="dv">0</span>))<span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> activityFlag <span class="op">=</span> dNtl<span class="op">.</span><span class="fu">gt</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> nearBorderFlag <span class="op">=</span> distBorder<span class="op">.</span><span class="fu">lt</span>(<span class="dv">10000</span>)<span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> highPriority <span class="op">=</span> developmentFlag<span class="op">.</span><span class="fu">and</span>(activityFlag)<span class="op">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> mediumPriority <span class="op">=</span> developmentFlag<span class="op">.</span><span class="fu">or</span>(activityFlag)<span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> operationalHighFlag <span class="op">=</span> highPriority</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">and</span>(distConfirmed<span class="op">.</span><span class="fu">lt</span>(<span class="dv">5000</span>))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">and</span>(ntl2024<span class="op">.</span><span class="fu">gt</span>(<span class="dv">5</span>))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">and</span>(dNtl<span class="op">.</span><span class="fu">gt</span>(<span class="dv">0</span>))<span class="op">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> tier <span class="op">=</span> ee<span class="op">.</span><span class="fu">String</span>(ee<span class="op">.</span><span class="at">Algorithms</span><span class="op">.</span><span class="fu">If</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    highPriority<span class="op">,</span> <span class="st">'high'</span><span class="op">,</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    ee<span class="op">.</span><span class="at">Algorithms</span><span class="op">.</span><span class="fu">If</span>(mediumPriority<span class="op">,</span> <span class="st">'medium'</span><span class="op">,</span> <span class="st">'low'</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  ))<span class="op">;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> operationalTier <span class="op">=</span> ee<span class="op">.</span><span class="fu">String</span>(ee<span class="op">.</span><span class="at">Algorithms</span><span class="op">.</span><span class="fu">If</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    operationalHighFlag<span class="op">,</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">'operational_high'</span><span class="op">,</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    tier</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  ))<span class="op">;</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> f<span class="op">.</span><span class="fu">set</span>({</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">development_flag</span><span class="op">:</span> developmentFlag<span class="op">,</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">activity_flag</span><span class="op">:</span> activityFlag<span class="op">,</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">near_border_flag</span><span class="op">:</span> nearBorderFlag<span class="op">,</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="dt">priority_tier</span><span class="op">:</span> tier<span class="op">,</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">operational_high_flag</span><span class="op">:</span> operationalHighFlag<span class="op">,</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">operational_priority_tier</span><span class="op">:</span> operationalTier</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Candidate Density Visualisation</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Paint candidate polygons at 1 km scale and apply smoothing kernel</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> painted <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>()<span class="op">.</span><span class="fu">byte</span>()<span class="op">.</span><span class="fu">paint</span>(candidates<span class="op">,</span> <span class="dv">1</span>)</span>
@@ -421,49 +455,48 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">resample</span>(<span class="st">'bilinear'</span>)</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">clip</span>(aoi)</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">selfMask</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The Stage 2 pipeline reduces 24,464 Stage 1 candidates to a shortlist of 15 high-priority zones by applying distance and night-time light thresholds:</p>
+<p>The Stage 2 pipeline retains 24,464 refined candidate zones and assigns them to analytical priority tiers. A much smaller operational shortlist of 15 candidates is used for default display, but these are not confirmed sites.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 30%">
-<col style="width: 43%">
+<col style="width: 44%">
+<col style="width: 24%">
+<col style="width: 31%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Tier</th>
-<th>Count</th>
-<th>Criteria</th>
+<th>Output group</th>
+<th style="text-align: right;">Count</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>High</td>
-<td>8,425</td>
-<td>Both development and activity flags triggered</td>
+<td>Stage 1 candidate points</td>
+<td style="text-align: right;">24,464</td>
+<td>Broad embedding-based screening output</td>
 </tr>
 <tr class="even">
-<td>Medium</td>
-<td>13,059</td>
-<td>One flag triggered</td>
+<td>Stage 2 high tier</td>
+<td style="text-align: right;">8,425</td>
+<td>Triggered both development and activity flags</td>
 </tr>
 <tr class="odd">
-<td>Low</td>
-<td>2,980</td>
-<td>Neither flag</td>
+<td>Stage 2 medium tier</td>
+<td style="text-align: right;">13,059</td>
+<td>One of the two flags triggered</td>
 </tr>
 <tr class="even">
-<td><strong>Operational shortlist</strong></td>
-<td><strong>15</strong></td>
-<td><strong>Strictest distance and NTL conditions</strong></td>
+<td>Stage 2 low tier</td>
+<td style="text-align: right;">2,980</td>
+<td>Neither flag triggered, retained for uncertainty</td>
+</tr>
+<tr class="odd">
+<td>Operational shortlist</td>
+<td style="text-align: right;">15</td>
+<td>Narrow default display subset using stricter distance and night time light conditions</td>
 </tr>
 </tbody>
 </table>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/methodology_diagram.png" class="img-fluid figure-img"></p>
-<figcaption>Stage 2 Refinement Pipeline</figcaption>
-</figure>
-</div>
 <hr>
 </section>
 <section id="references" class="level2">
@@ -474,6 +507,8 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 <li><p>Amnesty International (2023). <em>Trapped: The Human Suffering behind the Scam Centres</em>. London: Amnesty International.</p></li>
 <li><p>Amnesty International (2025). ‘I was someone else’s property’: Slavery, human trafficking and torture in Cambodia’s scamming compounds. [online] Available at: https://www.amnesty.org/en/wp-content/uploads/2025/06/ASA2394472025ENGLISH.pdf [Accessed 25 Apr.&nbsp;2026].</p></li>
 <li><p>Australian Strategic Policy Institute (2023). <em>Mapping the Scam Compound Industry in Southeast Asia</em>. Canberra: ASPI.</p></li>
+<li><p>Google Earth Engine (n.d.) <em>Satellite Embedding V1 Annual</em>. Google Earth Engine Data Catalog. Available at: https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL (Accessed: 25 April 2026).</p></li>
+<li><p>Google Earth Engine Community (n.d.) <em>Satellite Embedding 05: Similarity Search</em>. Available at: https://developers.google.com/earth-engine/tutorials/community/satellite-embedding-05-similarity-search (Accessed: 25 April 2026).</p></li>
 <li><p>Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D. and Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. <em>Remote Sensing of Environment</em>, 202, pp.18–27. https://doi.org/10.1016/j.rse.2017.06.031</p></li>
 <li><p>UNODC (2023) Trafficking in Persons for the Purpose of Forced Criminality: Summary Policy Brief. Available at: https://www.unodc.org/roseap/uploads/documents/Publications/2023/TiP_for_FC_Summary_Policy_Brief.pdf (Accessed: 25 April 2026).</p></li>
 <li><p>UNODC (2025) Inflection Point: Transnational Organized Crime and the Changing Landscape of Cyber-Enabled Fraud in Southeast Asia. Available at: https://www.unodc.org/roseap/uploads/documents/Publications/2025/Inflection_Point_2025.pdf (Accessed: 25 April 2026).</p></li>
