@@ -275,41 +275,29 @@ S(x)=\frac{1}{J}\sum_{j=1}^{J}s_j(x)
 </ul>
 <p>Small isolated fragments were removed using a connected pixel filter, and the cleaned raster was vectorised into Stage 1 candidate points. The p97 setting was selected because it was tighter than p95 while retaining high coverage of known confirmed and suspected locations.</p>
 <p><strong>Stage 2 — Indicator-Based Refinement</strong></p>
-<p>Candidate zones are scored against a metrics stack:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 45%">
-<col style="width: 54%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Indicator</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>dNDBI 2021–2024</td>
-<td>Built-up signal change. <span class="math inline">\(\text{NDBI} = \frac{\text{SWIR} - \text{NIR}}{\text{SWIR} + \text{NIR}}\)</span>, and <span class="math inline">\(\Delta NDBI = NDBI_{2024}-NDBI_{2021}\)</span>.</td>
-</tr>
-<tr class="even">
-<td>dNDVI 2021–2024</td>
-<td>Vegetation/greenness change. <span class="math inline">\(\text{NDVI}=\frac{NIR-Red}{NIR+Red}\)</span>, and <span class="math inline">\(\Delta NDVI = NDVI_{2024}-NDVI_{2021}\)</span>.</td>
-</tr>
-<tr class="odd">
-<td>dNTL 2021–2024</td>
-<td>Night-time light radiance change. <span class="math inline">\(\Delta NTL = NTL_{2024}-NTL_{2021}\)</span>.</td>
-</tr>
-<tr class="even">
-<td>dist_to_confirmed_m</td>
-<td>Distance from each candidate zone to the nearest confirmed reported site.</td>
-</tr>
-<tr class="odd">
-<td>dist_to_border_m</td>
-<td>Distance to the nearest national border (retained as contextual information rather than a hard tiering gate).</td>
-</tr>
-</tbody>
-</table>
+<p>Stage 1 is intentionally broad, so Stage 2 refines the candidate set using interpretable contextual indicators. Candidate points were converted into 500 m buffered zones, and mean values were extracted from a 2021–2024 metric stack containing Sentinel-2 spectral indices, VIIRS night-time lights, and distance variables.</p>
+<p>The main change metrics are:</p>
+<p><span class="math display">\[
+\text{NDVI}=\frac{NIR-Red}{NIR+Red}
+\]</span></p>
+<p><span class="math display">\[
+\text{NDBI}=\frac{SWIR-NIR}{SWIR+NIR}
+\]</span></p>
+<p><span class="math display">\[
+\Delta X = X_{2024}-X_{2021}
+\]</span></p>
+<p>And an increase in built up signal combined with a decrease in vegetation signal is defined as development evidence :</p>
+<p><span class="math display">\[
+\text{development flag} = (\Delta \text{NDBI} &gt; 0) \land (\Delta \text{NDVI} &lt; 0)
+\]</span></p>
+<p>Activity evidence is defined as an increase in night time light radiance:</p>
+<p><span class="math display">\[
+\text{activity flag} = \Delta \text{NTL} &gt; 0
+\]</span></p>
+<p>Candidates then assigned to priority tiers. High priority candidates triggered both development and activity flags; medium priority candidates triggered one of the two flags; and low-priority candidates triggered neither flag but retained to preserve uncertainty. Border distance was retained as contextual information rather than used as a hard filtering gate in the final tiering.</p>
+<p><strong>Validation</strong></p>
+<p>Validation conduct in two parts. First, Stage 1 was evaluated using raster overlap checks against suspected sites, non-reference confirmed sites, held out confirmed samples, and control points. This shows that the 97th percentile embedding layer had very high recall, including a mean held out confirmed recall of 1.0 across repeated splits, but it also capture control points. Therefore, Stage 1 is interpreted as a high recall screening surface rather than a precise classifier.</p>
+<p>Second, Stage 2 was evaluated using vector overlap checks for the high, medium, low, and all refined candidate layers. The refined layer reduced control hits from 22/22 under Stage 1 to 7/22 for all refined candidates within 500 m, but recall for known sites also dropped. Therefore, the final output should be read as a prioritisation layer for further investigation, not as a verified list of scam compounds.</p>
 <hr>
 </section>
 <section id="interface" class="level3">
