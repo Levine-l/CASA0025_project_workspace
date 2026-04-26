@@ -46,7 +46,17 @@ border security.
 
 ### Problem Statement
 
-Transnational organized crime and the rapid expansion of cyber scams across Southeast Asia have emerged as a significant humanitarian and security crisis (UNODC, 2025). Despite their scale, these compounds remain difficult to systematically detect due to their strategic placement in border regions and their deliberate spatial overlap with legitimate commercial environments (ASPI, 2025). Traditional monitoring is often hindered by fragmented reporting and a critical shortage of verified ground-truth data (Global Initiative, 2026). Our application addresses this gap by providing a reproducible, satellite-based screening tool that bridges the divide between remote sensing technology and policy-oriented investigation. By grounding our analysis in documented reference cases, this platform offers an intuitive interface for researchers and policymakers to visualize high-risk expansion zones，helps overcome long-standing barriers in cross-border data sharing and regional security planning.
+Transnational organized crime and the rapid expansion of cyber scams across Southeast Asia 
+have emerged as a significant humanitarian and security crisis (UNODC, 2025). Despite their 
+scale, these compounds remain difficult to systematically detect due to their strategic placement 
+in border regions and their deliberate spatial overlap with legitimate commercial environments 
+(ASPI, 2025). Traditional monitoring is often hindered by fragmented reporting and a critical 
+shortage of verified ground-truth data (Global Initiative, 2026). Our application addresses this 
+gap by providing a reproducible, satellite-based screening tool that bridges the divide between 
+remote sensing technology and policy-oriented investigation. By grounding our analysis in documented 
+reference cases, this platform offers an intuitive interface for researchers and policymakers to 
+visualize high-risk expansion zones, helps overcome long-standing barriers in cross-border data 
+sharing and regional security planning.
 
 ### End User
 
