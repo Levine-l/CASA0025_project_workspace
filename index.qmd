@@ -63,10 +63,9 @@ sharing and regional security planning.
 Our platform is designed for human rights monitoring agencies, investigative journalists,
 and policy-oriented researchers working to combat transnational crime in Southeast Asia.
 Limited public information and complex on-the-ground situations have long hampered the
-effectiveness of international interventions. Our interactive maps significantly enhance
-data accessibility and applicability, fostering collaboration among global stakeholders
-and providing robust spatial evidence to support international initiatives against forced
-labour, human trafficking, and torture.
+effectiveness of international interventions. Our interactive map is designed to improves 
+access to spatial screening outputs, and provides a structured evidence base for further 
+investigation into forced labour, human trafficking, and related forms of abuse.
 
 ---
 
